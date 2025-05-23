@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Supervisório - Portões</title>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+<style>
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #0e62df89;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    padding: 10px 20px;
+    background-color: #003366;
+    color: white;
+  }
+  header img {
+    height: 40px;
+    margin-right: 15px;
+  }
+  header h1 {
+    font-size: 22px;
+    margin: 0;
+  }
+  .planta-container {
+    position: relative;
+    width: 100%;
+    max-width: 1050px;
+    margin: 20px auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+  }
+  .planta-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .portao {
+    position: absolute;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+    padding: 2px 6px;
+    cursor: pointer;
+    user-select: none;
+    background-color: rgba(0,128,0,0.6);
+    border: 1px solid #006400;
+    transition: background-color 0.3s;
+  }
+  .portao.fechar {
+    background-color: rgba(255,0,0,0.6);
+    border: 1px solid #aa0000;
+  }
+  .portao.manutencao {
+    background-color: rgba(255,165,0,0.6);
+    border: 1px solid #cc8400;
+  }
+  .formulario {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    display: none;
+    z-index: 100;
+    width: 320px;
+  }
+  .formulario label {
+    display: block;
+    margin-top: 10px;
+  }
+  .formulario input[type=text],
+  .formulario select,
+  .formulario textarea {
+    width: 100%;
+    padding: 6px;
+    margin-top: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 14px;
+  }
+  .formulario button {
+    margin-top: 15px;
+    padding: 8px 15px;
+    background-color: #003366;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background-color: rgba(0,0,0,0.5);
+    display: none;
+    z-index: 50;
+  }
+  .historico-lista {
+    max-height: 150px;
+    overflow-y: auto;
+    margin-top: 10px;
+    border-top: 1px solid #ddd;
+    font-size: 12px;
+  }
+  .historico-item {
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="https://i.imgur.com/PazFZ1y.png" alt="Logo da Empresa" />
+  <h1>Supervisório - Portões de Armazéns</h1>
+</header>
+
+<div class="planta-container">
+  <img src="https://i.imgur.com/MpjnPTw.png" alt="Planta da Fábrica" />
+  
+  <!-- Exemplos de portões com posição CSS (ajuste as posições conforme sua planta) -->
+  <div class="portao" id="portao-P03" style="top: 15%; left: 14%;" onclick="abrirFormulario('P03')">P03</div>
+  <div class="portao" id="portao-P04" style="top: 10%; left: 20%;" onclick="abrirFormulario('P04')">P04</div>
+  <div class="portao" id="portao-P02" style="top: 50%; left: 14%;" onclick="abrirFormulario('P02')">P02</div>
+  <div class="portao" id="portao-P01" style="top: 50%; left: 22%;" onclick="abrirFormulario('P01')">P01</div>
+  <!-- Adicione outros portões aqui conforme necessidade -->
+</div>
+
+<div class="overlay" id="overlay" onclick="fecharFormulario()"></div>
+
+<div class="formulario" id="formulario">
+  <h3 id="tituloPortao">Portão</h3>
+  <form id="formPortao" onsubmit="salvarStatus(event)">
+    <input type="hidden" id="idPortao" />
+    <label for="status">Status:</label>
+    <select id="status" required>
+      <option value="">Selecione</option>
+      <option value="aberto">Aberto</option>
+      <option value="fechado">Fechado</option>
+      <option value="manutencao">Em manutenção</option>
+    </select>
+
+    <label for="observacoes">Observações:</label>
+    <textarea id="observacoes" rows="3" placeholder="Equipe, data, hora, etc."></textarea>
+
+    <button type="submit">Salvar</button>
+  </form>
+  <div class="historico-lista" id="historicoLista"></div>
+</div>
+
+<script>
+  // Configuração do Firebase (substitua com seus dados)
+  const firebaseConfig = {
+    apiKey: "AIzaSyBNLGsUrMFLSA9NmqkKPlouWeO7ttvM6Fc",
+    authDomain: "armazensrig.firebaseapp.com",
+    databaseURL: "https://armazensrig-default-rtdb.firebaseio.com",
+    projectId: "armazensrig",
+    storageBucket: "armazensrig.firebasestorage.app",
+    messagingSenderId: "561768076694",
+    appId: "1:561768076694:web:3f9cba366f19eed543f9b7"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  const overlay = document.getElementById('overlay');
+  const formulario = document.getElementById('formulario');
+  const tituloPortao = document.getElementById('tituloPortao');
+  const idPortaoInput = document.getElementById('idPortao');
+  const statusSelect = document.getElementById('status');
+  const observacoesInput = document.getElementById('observacoes');
+  const historicoLista = document.getElementById('historicoLista');
+
+  // Abre o formulário para o portão selecionado
+  function abrirFormulario(idPortao) {
+    idPortaoInput.value = idPortao;
+    tituloPortao.textContent = 'Portão: ' + idPortao;
+    overlay.style.display = 'block';
+    formulario.style.display = 'block';
+
+    // Buscar dados do portão no Firebase
+    db.ref('portoes/' + idPortao).get().then(snapshot => {
+      if (snapshot.exists()) {
+        const dados = snapshot.val();
+        statusSelect.value = dados.status || '';
+        observacoesInput.value = '';
+        montarHistorico(dados.historico || []);
+      } else {
+        statusSelect.value = '';
+        observacoesInput.value = '';
+        montarHistorico([]);
+      }
+    });
+  }
+
+  // Fecha o formulário
+  function fecharFormulario() {
+    overlay.style.display = 'none';
+    formulario.style.display = 'none';
+    limparHistorico();
+  }
+
+  // Monta a lista de histórico
+  function montarHistorico(lista) {
+    historicoLista.innerHTML = '';
+    if(lista.length === 0){
+      historicoLista.innerHTML = '<small>Nenhum histórico registrado.</small>';
+      return;
+    }
+    lista.slice().reverse().forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'historico-item';
+      div.textContent = `${item.data} - ${item.status} - ${item.observacoes || ''}`;
+      historicoLista.appendChild(div);
+    });
+  }
+
+  // Limpa histórico na tela
+  function limparHistorico() {
+    historicoLista.innerHTML = '';
+  }
+
+  // Salva o status e observações do portão no Firebase
+  function salvarStatus(event) {
+    event.preventDefault();
+    const idPortao = idPortaoInput.value;
+    const status = statusSelect.value;
+    const observacoes = observacoesInput.value.trim();
+
+    if (!idPortao || !status) {
+      alert('Por favor, selecione um status.');
+      return;
+    }
+
+    // Atualiza o portão no Firebase
+    const refPortao = db.ref('portoes/' + idPortao);
+
+    // Pega dados atuais para preservar histórico
+    refPortao.get().then(snapshot => {
+      let historico = [];
+      if (snapshot.exists()) {
+        const dadosAtuais = snapshot.val();
+        historico = dadosAtuais.historico || [];
+      }
+
+      // Adiciona nova entrada no histórico com timestamp formatado
+      const dataAtual = new Date();
+      const dataFormatada = dataAtual.toLocaleString('pt-BR', {timeZone: 'America/Sao_Paulo'});
+      historico.push({
+        status: status,
+        observacoes: observacoes,
+        data: dataFormatada
+      });
+
+      // Atualiza dados
+      refPortao.set({
+        status: status,
+        historico: historico
+      }).then(() => {
+        // Atualiza visual dos portões
+        atualizarVisualPortao(idPortao, status);
+        fecharFormulario();
+      });
+    });
+  }
+
+  // Atualiza a cor do portão na planta conforme status
+  function atualizarVisualPortao(idPortao, status) {
+    const portaoElem = document.getElementById('portao-' + idPortao);
+    if (!portaoElem) return;
+
+    portaoElem.classList.remove('fechar', 'manutencao');
+    if(status === 'fechado') {
+      portaoElem.classList.add('fechar');
+    } else if(status === 'manutencao') {
+      portaoElem.classList.add('manutencao');
+    } // Aberto é o padrão, verde
+  }
+
+  // Carrega o status de todos os portões ao iniciar
+  function carregarStatusPortoes() {
+    db.ref('portoes').get().then(snapshot => {
+      if (snapshot.exists()) {
+        const portoes = snapshot.val();
+        Object.entries(portoes).forEach(([idPortao, dados]) => {
+          atualizarVisualPortao(idPortao, dados.status);
+        });
+      }
+    });
+  }
+
+  // Inicializa a aplicação
+  window.onload = () => {
+    carregarStatusPortoes();
+  }
+</script>
+
+</body>
+</html>
