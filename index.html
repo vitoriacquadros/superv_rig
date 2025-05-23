@@ -136,10 +136,25 @@
   <img src="https://i.imgur.com/MpjnPTw.png" alt="Planta da Fábrica" />
   
   <!-- Exemplos de portões com posição CSS (ajuste as posições conforme sua planta) -->
-  <div class="portao" id="portao-P03" style="top: 15%; left: 14%;" onclick="abrirFormulario('P03')">P03</div>
-  <div class="portao" id="portao-P04" style="top: 10%; left: 20%;" onclick="abrirFormulario('P04')">P04</div>
-  <div class="portao" id="portao-P02" style="top: 50%; left: 14%;" onclick="abrirFormulario('P02')">P02</div>
-  <div class="portao" id="portao-P01" style="top: 50%; left: 22%;" onclick="abrirFormulario('P01')">P01</div>
+  <div class="portao" style="top: 15%; left: 14%;" onclick="abrirFormulario('RIG1-0260-ARMF-PA03')">P03</div>
+    <div class="portao" style="top: 10%; left: 20%;" onclick="abrirFormulario('RIG1-0260-ARMF-PA04')">P04</div>
+    <div class="portao" style="top: 50%; left: 14%;" onclick="abrirFormulario('RIG1-0260-ARMF-PA02')">P02</div>
+    <div class="portao" style="top: 50%; left: 22%;" onclick="abrirFormulario('RIG1-0260-ARMF-PA01')">P01</div>
+    <div class="portao" style="top: 50%; left: 30%;" onclick="abrirFormulario('RIG1-0260-ARME-PA01')">P01</div>
+    <div class="portao" style="top: 50%; left: 38%;" onclick="abrirFormulario('RIG1-0260-ARMD-PA01')">P01</div>
+    <div class="portao" style="top: 12%; left: 36%;" onclick="abrirFormulario('RIG1-0260-ARMD-PA02')">P02</div>
+    <div class="portao" style="top: 16%; left: 27%;" onclick="abrirFormulario('RIG1-0260-ARME-PA02')">P02</div>
+    <div class="portao" style="top: 30%; left: 60%;" onclick="abrirFormulario('RIG1-0260-ARMB-PA03')">P02</div>
+    <div class="portao" style="top: 30%; left: 53%;" onclick="abrirFormulario('RIG1-0260-ARMC-PA03')">P02</div>
+    <div class="portao" style="top: 60%; left: 60%;" onclick="abrirFormulario('RIG1-0260-ARMB-PA04')">P01</div>
+    <div class="portao" style="top: 60%; left: 53%;" onclick="abrirFormulario('RIG1-0260-ARMC-PA04')">P01</div>
+    <div class="portao" style="top: 60%; left: 69%;" onclick="abrirFormulario('RIG1-0260-ARMA-PA06')">P06</div>
+    <div class="portao" style="top: 40%; left: 75%;" onclick="abrirFormulario('RIG1-0260-ARMA-PA05')">P05</div>
+    <div class="portao" style="top: 20%; left: 75%;" onclick="abrirFormulario('RIG1-0260-ARMA-PA04')">P04</div>
+    <div class="portao" style="top: 20%; left: 70%;" onclick="abrirFormulario('RIG1-0260-ARMA-PA02')">P02</div>
+    <div class="portao" style="top: 37%; left: 64%;" onclick="abrirFormulario('RIG1-0260-ARMA-PA03')">P03</div>
+    <div class="portao" style="top: 55%; left: 75%;" onclick="abrirFormulario('RIG1-CR120')">Portão CR120</div>
+    <div class="portao" style="top: 65%; left: 65%;" onclick="abrirFormulario('RIG1-0260-ARMA-PA01 CR150')">P01</div>
   <!-- Adicione outros portões aqui conforme necessidade -->
 </div>
 
@@ -242,6 +257,7 @@
     const idPortao = idPortaoInput.value;
     const status = statusSelect.value;
     const observacoes = observacoesInput.value.trim();
+    
 
     if (!idPortao || !status) {
       alert('Por favor, selecione um status.');
