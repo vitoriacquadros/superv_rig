@@ -24,7 +24,7 @@ const botoes = [
   { id: 'P03', pos: ['15%', '14%'], data: 'RIG1-0260-ARMF-PA03' },
   { id: 'P04', pos: ['10%', '20%'], data: 'RIG1-0260-ARMF-PA04' },
   { id: 'P01', pos: ['50%', '14%'], data: 'RIG1-0260-ARMF-PA01' },
-  { id: 'P02', pos: ['50%', '22%'], data: 'RIG1-0260-ARMF-PA02' },
+  { id: 'P02AAAAAAAAA', pos: ['50%', '22%'], data: 'RIG1-0260-ARMF-PA02' },
   { id: 'P01', pos: ['50%', '30%'], data: 'RIG1-0260-ARME-PA01' },
   { id: 'P01', pos: ['50%', '38%'], data: 'RIG1-0260-ARMD-PA01' },
   { id: 'P02', pos: ['12%', '36%'], data: 'RIG1-0260-ARMD-PA02' },
