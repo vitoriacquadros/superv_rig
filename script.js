@@ -17,7 +17,7 @@ const tituloPortao = document.getElementById('tituloPortao');
 const idPortaoInput = document.getElementById('idPortao');
 const statusSelect = document.getElementById('status');
 const observacoesInput = document.getElementById('observacoes');
-const notaSAPInput = document.getElementById('notaSAP');
+const ordemSAPInput = document.getElementById('ordemSAP');
 const historicoLista = document.getElementById('historicoLista');
 const container = document.querySelector('.planta-container');
 
@@ -66,16 +66,16 @@ function abrirFormulario(idPortao) {
       const dados = snapshot.val();
       statusSelect.value = dados.status || '';
 
-      // Preenche a última observação e nota SAP do histórico
+      // Preenche a última observação e ordem SAP do histórico
       const ultimo = dados.historico?.at(-1);
       observacoesInput.value = ultimo?.observacoes || '';
-      notaSAPInput.value = ultimo?.notaSAP || '';
+      ordemSAPInput.value = ultimo?.ordemSAP || '';
 
       montarHistorico(dados.historico || []);
     } else {
       statusSelect.value = '';
       observacoesInput.value = '';
-      notaSAPInput.value = '';
+      ordemSAPInput.value = '';
       montarHistorico([]);
     }
   });
@@ -96,7 +96,7 @@ function montarHistorico(lista) {
   lista.slice().reverse().forEach(item => {
     const div = document.createElement('div');
     div.className = 'historico-item';
-    div.textContent = `${item.data} - ${item.status} - ${item.observacoes || ''}` + (item.notaSAP ? ` (SAP: ${item.notaSAP})` : '');
+    div.textContent = `${item.data} - ${item.status} - ${item.observacoes || ''}` + (item.ordemSAP ? ` (SAP: ${item.ordemSAP})` : '');
     historicoLista.appendChild(div);
   });
 }
@@ -110,7 +110,7 @@ function salvarStatus(event) {
   const idPortao = idPortaoInput.value;
   const status = statusSelect.value;
   const observacoes = observacoesInput.value.trim();
-  const notaSAP = notaSAPInput.value.trim();
+  const ordemSAP = ordemSAPInput.value.trim();
   const dataAtual = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
 
   if (!idPortao || !status) {
@@ -128,7 +128,7 @@ function salvarStatus(event) {
 
     const dataAtual = new Date();
     const dataFormatada = dataAtual.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-    historico.push({ status: status, observacoes: observacoes, data: dataFormatada, notaSAP: notaSAP });
+    historico.push({ status: status, observacoes: observacoes, data: dataFormatada, ordemSAP: ordemSAP });
 
     refPortao.set({ status: status, historico: historico }).then(() => {
       atualizarVisualPortao(idPortao, status);
