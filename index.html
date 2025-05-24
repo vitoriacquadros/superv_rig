@@ -134,8 +134,22 @@
 
 <div class="planta-container">
   <img src="https://i.imgur.com/MpjnPTw.png" alt="Planta da Fábrica" />
+
+<div class="portao" id="portao-P03" style="top: 15%; left: 14%;" onclick="abrirFormulario('RIG1-0260-ARMF-PA03')">P03</div>
+    <div class="portao" id="portao-P04" style="top: 25%; left: 14%;" onclick="abrirFormulario('RIG1-0260-ARMF-PA04')">P04</div>
+    <div class="portao" id="portao-P02" style="top: 45%; left: 10%;" onclick="abrirFormulario('RIG1-0260-ARMF-PA02')">P02</div>
+    <div class="portao" id="portao-P01" style="top: 60%; left: 13%;" onclick="abrirFormulario('RIG1-0260-ARMF-PA01')">P01</div>
+    <div class="portao" id="portao-P05" style="top: 40%; left: 25%;" onclick="abrirFormulario('RIG1-0260-ARMF-PA05')">P05</div>
+    <div class="portao" id="portao-P06" style="top: 55%; left: 25%;" onclick="abrirFormulario('RIG1-0260-ARMF-PA06')">P06</div>
+    <div class="portao" id="portao-P01-ARME1" style="top: 85%; left: 30%;" onclick="abrirFormulario('RIG1-0260-ARME-PA01')">P01-ARME1</div>
+    <div class="portao" id="portao-P02-ARME1" style="top: 70%; left: 37%;" onclick="abrirFormulario('RIG1-0260-ARME-PA02')">P02-ARME1</div>
+    <div class="portao" id="portao-P03-ARME1" style="top: 60%; left: 44%;" onclick="abrirFormulario('RIG1-0260-ARME-PA03')">P03-ARME1</div>
+    <div class="portao" id="portao-P04-ARME1" style="top: 47%; left: 44%;" onclick="abrirFormulario('RIG1-0260-ARME-PA04')">P04-ARME1</div>
+    <div class="portao" id="portao-P05-ARME1" style="top: 33%; left: 44%;" onclick="abrirFormulario('RIG1-0260-ARME-PA05')">P05-ARME1</div>
+    <div class="portao" id="portao-P06-ARME1" style="top: 20%; left: 44%;" onclick="abrirFormulario('RIG1-0260-ARME-PA06')">P06-ARME1</div>
+
   
-  <div class="portao" id="portao-P03" style="top: 15%; left: 14%;" onclick="abrirFormulario('RIG1-0260-ARMF-PA03')">P03</div>
+ <!--  <div class="portao" id="portao-P03" style="top: 15%; left: 14%;" onclick="abrirFormulario('RIG1-0260-ARMF-PA03')">P03</div>
   <div class="portao" id="portao-P04" style="top: 10%; left: 20%;" onclick="abrirFormulario('RIG1-0260-ARMF-PA04')">P04</div>
   <div class="portao" id="portao-P02" style="top: 50%; left: 14%;" onclick="abrirFormulario('RIG1-0260-ARMF-PA02')">P02</div>
   <div class="portao" id="portao-P01" style="top: 50%; left: 22%;" onclick="abrirFormulario('RIG1-0260-ARMF-PA01')">P01</div>
@@ -154,6 +168,8 @@
   <div class="portao" id="portao-P03-ARMA3"style="top: 37%; left: 64%;" onclick="abrirFormulario('RIG1-0260-ARMA-PA03')">P03</div>
   <div class="portao" id="portao-CR-120"style="top: 55%; left: 75%;" onclick="abrirFormulario('RIG1-CR120')">Portão CR120</div>
   <div class="portao" id="portao-P01 CR150"style="top: 65%; left: 65%;" onclick="abrirFormulario('RIG1-0260-ARMA-PA01 CR150')">P01</div>
+
+-->
 
 </div>
 
@@ -201,6 +217,21 @@
   const observacoesInput = document.getElementById('observacoes');
   const historicoLista = document.getElementById('historicoLista');
 
+   const mapaPortoes = {
+      "RIG1-0260-ARMF-PA01": "portao-P01",
+      "RIG1-0260-ARMF-PA02": "portao-P02",
+      "RIG1-0260-ARMF-PA03": "portao-P03",
+      "RIG1-0260-ARMF-PA04": "portao-P04",
+      "RIG1-0260-ARMF-PA05": "portao-P05",
+      "RIG1-0260-ARMF-PA06": "portao-P06",
+      "RIG1-0260-ARME-PA01": "portao-P01-ARME1",
+      "RIG1-0260-ARME-PA02": "portao-P02-ARME1",
+      "RIG1-0260-ARME-PA03": "portao-P03-ARME1",
+      "RIG1-0260-ARME-PA04": "portao-P04-ARME1",
+      "RIG1-0260-ARME-PA05": "portao-P05-ARME1",
+      "RIG1-0260-ARME-PA06": "portao-P06-ARME1"
+    };
+
   // Abre o formulário para o portão selecionado
   function abrirFormulario(idPortao) {
     idPortaoInput.value = idPortao;
@@ -222,6 +253,15 @@
       }
     });
   }
+
+  // Fecha o formulário ao clicar fora dele
+  overlay.addEventListener('click', fecharFormulario);
+  // Fecha o formulário ao pressionar ESC
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+      fecharFormulario();
+    }
+  });
 
   // Fecha o formulário
   function fecharFormulario() {
@@ -295,17 +335,32 @@
   }
 
   // Atualiza a cor do portão na planta conforme status
-  function atualizarVisualPortao(idPortao, status) {
-    const portaoElem = document.getElementById('portao-' + idPortao);
-    if (!portaoElem) return;
+ // function atualizarVisualPortao(idPortao, status) {
+ //   const portaoElem = document.getElementById('portao-' + idPortao);
+   // if (!portaoElem) return;
 
-    portaoElem.classList.remove('fechar', 'manutencao');
-    if(status === 'fechado') {
-      portaoElem.classList.add('fechar');
-    } else if(status === 'manutencao') {
-      portaoElem.classList.add('manutencao');
-    } // Aberto é o padrão, verde
+    //portaoElem.classList.remove('fechar', 'manutencao');
+    //if(status === 'fechado') {
+     // portaoElem.classList.add('fechar');
+    //} else if(status === 'manutencao') {
+     // portaoElem.classList.add('manutencao');
+   // } // Aberto é o padrão, verde
+// } 
+ 
+
+  function atualizarVisualPortao(idFirebase, status) {
+  const idVisual = mapaIds[idFirebase];
+  const portaoElem = document.getElementById('portao-' + idVisual);
+  if (!portaoElem) return;
+
+  portaoElem.classList.remove('fechar', 'manutencao');
+  if (status === 'fechado') {
+    portaoElem.classList.add('fechar');
+  } else if (status === 'manutencao') {
+    portaoElem.classList.add('manutencao');
   }
+}
+
 
   // Carrega o status de todos os portões ao iniciar
   function carregarStatusPortoes() {
