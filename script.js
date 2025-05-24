@@ -17,7 +17,8 @@ const tituloPortao = document.getElementById('tituloPortao');
 const idPortaoInput = document.getElementById('idPortao');
 const statusSelect = document.getElementById('status');
 const observacoesInput = document.getElementById('observacoes');
-const notaSAPInput = document.getElementById('notaSAP');
+const ordemSAPInput = document.getElementById('ordemSAP');
+let indiceHistoricoEditando = null;
 const historicoLista = document.getElementById('historicoLista');
 const container = document.querySelector('.planta-container');
 
@@ -66,16 +67,16 @@ function abrirFormulario(idPortao) {
       const dados = snapshot.val();
       statusSelect.value = dados.status || '';
 
-      // Preenche a última observação e nota SAP do histórico
+      // Preenche a última observação e ordem SAP do histórico
       const ultimo = dados.historico?.at(-1);
       observacoesInput.value = ultimo?.observacoes || '';
-      notaSAPInput.value = ultimo?.notaSAP || '';
+      ordemSAPInput.value = ultimo?.ordemSAP || '';
 
       montarHistorico(dados.historico || []);
     } else {
       statusSelect.value = '';
       observacoesInput.value = '';
-      notaSAPInput.value = '';
+      ordemSAPInput.value = '';
       montarHistorico([]);
     }
   });
@@ -89,17 +90,34 @@ function fecharFormulario() {
 
 function montarHistorico(lista) {
   historicoLista.innerHTML = '';
+
   if (lista.length === 0) {
     historicoLista.innerHTML = '<small>Nenhum histórico registrado.</small>';
     return;
   }
-  lista.slice().reverse().forEach(item => {
+
+  // Inverter para manter mais recente no topo, mas manter índices originais
+  const listaReversa = lista.slice().reverse();
+
+  listaReversa.forEach((item, reverseIndex) => {
+    const indexOriginal = lista.length - 1 - reverseIndex;
+
     const div = document.createElement('div');
     div.className = 'historico-item';
-    div.textContent = `${item.data} - ${item.status} - ${item.observacoes || ''}` + (item.notaSAP ? ` (SAP: ${item.notaSAP})` : '');
+    div.textContent = `${item.data} - ${item.status} - ${item.observacoes || ''}` + 
+                      (item.ordemSAP ? ` (SAP: ${item.ordemSAP})` : '');
+
+    div.addEventListener('click', () => {
+      statusSelect.value = item.status || '';
+      observacoesInput.value = item.observacoes || '';
+      ordemSAPInput.value = item.ordemSAP || '';
+      indiceHistoricoEditando = indexOriginal; // Guardar índice para editar depois
+    });
+
     historicoLista.appendChild(div);
   });
 }
+
 
 function limparHistorico() {
   historicoLista.innerHTML = '';
@@ -107,11 +125,11 @@ function limparHistorico() {
 
 function salvarStatus(event) {
   event.preventDefault();
+
   const idPortao = idPortaoInput.value;
   const status = statusSelect.value;
   const observacoes = observacoesInput.value.trim();
-  const notaSAP = notaSAPInput.value.trim();
-  const dataAtual = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+  const ordemSAP = ordemSAPInput.value.trim();
 
   if (!idPortao || !status) {
     alert('Por favor, selecione um status.');
@@ -119,6 +137,7 @@ function salvarStatus(event) {
   }
 
   const refPortao = db.ref('portoes/' + idPortao);
+
   refPortao.get().then(snapshot => {
     let historico = [];
     if (snapshot.exists()) {
@@ -128,14 +147,32 @@ function salvarStatus(event) {
 
     const dataAtual = new Date();
     const dataFormatada = dataAtual.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-    historico.push({ status: status, observacoes: observacoes, data: dataFormatada, notaSAP: notaSAP });
+
+    const novoRegistro = {
+      status: status,
+      observacoes: observacoes,
+      ordemSAP: ordemSAP,
+      data: dataFormatada
+    };
+
+    if (indiceHistoricoEditando !== null) {
+      historico[indiceHistoricoEditando] = novoRegistro;
+    } else {
+      historico.push(novoRegistro);
+    }
 
     refPortao.set({ status: status, historico: historico }).then(() => {
       atualizarVisualPortao(idPortao, status);
       fecharFormulario();
+      indiceHistoricoEditando = null; // 🔁 Limpa o modo de edição
     });
+
+  }).catch(error => {
+    console.error('Erro ao salvar dados:', error);
+    alert('Erro ao salvar. Tente novamente.');
   });
 }
+
 
 function atualizarVisualPortao(idPortao, status) {
   const botoes = document.querySelectorAll('.portao');
