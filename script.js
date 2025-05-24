@@ -17,7 +17,6 @@ const tituloPortao = document.getElementById('tituloPortao');
 const idPortaoInput = document.getElementById('idPortao');
 const statusSelect = document.getElementById('status');
 const observacoesInput = document.getElementById('observacoes');
-const ordemSAPInput = document.getElementById('ordemSAP');
 const historicoLista = document.getElementById('historicoLista');
 const container = document.querySelector('.planta-container');
 
@@ -65,17 +64,11 @@ function abrirFormulario(idPortao) {
     if (snapshot.exists()) {
       const dados = snapshot.val();
       statusSelect.value = dados.status || '';
-
-      // Preenche a última observação e ordem SAP do histórico
-      const ultimo = dados.historico?.at(-1);
-      observacoesInput.value = ultimo?.observacoes || '';
-      ordemSAPInput.value = ultimo?.ordemSAP || '';
-
+      observacoesInput.value = '';
       montarHistorico(dados.historico || []);
     } else {
       statusSelect.value = '';
       observacoesInput.value = '';
-      ordemSAPInput.value = '';
       montarHistorico([]);
     }
   });
@@ -96,7 +89,7 @@ function montarHistorico(lista) {
   lista.slice().reverse().forEach(item => {
     const div = document.createElement('div');
     div.className = 'historico-item';
-    div.textContent = `${item.data} - ${item.status} - ${item.observacoes || ''}` + (item.ordemSAP ? ` (SAP: ${item.ordemSAP})` : '');
+    div.textContent = `${item.data} - ${item.status} - ${item.observacoes || ''}`;
     historicoLista.appendChild(div);
   });
 }
@@ -107,12 +100,9 @@ function limparHistorico() {
 
 function salvarStatus(event) {
   event.preventDefault();
-
   const idPortao = idPortaoInput.value;
   const status = statusSelect.value;
   const observacoes = observacoesInput.value.trim();
-  const ordemSAP = ordemSAPInput.value.trim();
-  const dataInput = document.getElementById('dataHora').value;
 
   if (!idPortao || !status) {
     alert('Por favor, selecione um status.');
@@ -120,7 +110,6 @@ function salvarStatus(event) {
   }
 
   const refPortao = db.ref('portoes/' + idPortao);
-
   refPortao.get().then(snapshot => {
     let historico = [];
     if (snapshot.exists()) {
@@ -128,31 +117,16 @@ function salvarStatus(event) {
       historico = dadosAtuais.historico || [];
     }
 
-    // Usa data selecionada pelo usuário ou atual se estiver vazia
-    const dataFormatada = dataInput
-      ? new Date(dataInput).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
-      : new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-
-    const novoRegistro = {
-      status: status,
-      observacoes: observacoes,
-      ordemSAP: ordemSAP,
-      data: dataFormatada
-    };
-
-    historico.push(novoRegistro);
+    const dataAtual = new Date();
+    const dataFormatada = dataAtual.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+    historico.push({ status: status, observacoes: observacoes, data: dataFormatada });
 
     refPortao.set({ status: status, historico: historico }).then(() => {
-      console.log('Salvo com sucesso:', novoRegistro);
       atualizarVisualPortao(idPortao, status);
       fecharFormulario();
-    }).catch(err => {
-      console.error('Erro ao salvar:', err);
-      alert('Erro ao salvar dados. Verifique o console.');
     });
   });
 }
-
 
 function atualizarVisualPortao(idPortao, status) {
   const botoes = document.querySelectorAll('.portao');
@@ -220,6 +194,7 @@ function mostrarPopupUltimosDados() {
     alert('Erro ao carregar dados. Tente novamente mais tarde.');
   });
 }
+
 
 function copiarPopupDados() {
   const area = document.getElementById('popup-conteudo');
