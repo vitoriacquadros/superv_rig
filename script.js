@@ -126,8 +126,13 @@ window.onload = () => {
 function mostrarPopupUltimosDados() {
   const textarea = document.getElementById('popup-conteudo');
   const agora = new Date().toLocaleDateString('pt-BR');
+  
   db.ref('portoes').get().then(snapshot => {
-    if (!snapshot.exists()) return;
+    if (!snapshot.exists()) {
+      alert('Nenhum dado encontrado.');
+      return;
+    }
+    
     const dados = snapshot.val();
     let texto = `⚠ Portões ${agora}\n\n`;
     const grupos = {};
@@ -150,8 +155,12 @@ function mostrarPopupUltimosDados() {
 
     textarea.value = texto.trim();
     document.getElementById('popup-dados').style.display = 'block';
+  }).catch(error => {
+    console.error('Erro ao buscar dados:', error);
+    alert('Erro ao carregar dados. Tente novamente mais tarde.');
   });
 }
+
 
 function copiarPopupDados() {
   const area = document.getElementById('popup-conteudo');
