@@ -20,40 +20,6 @@ const observacoesInput = document.getElementById('observacoes');
 const historicoLista = document.getElementById('historicoLista');
 const container = document.querySelector('.planta-container');
 
-const botoes = [
-  { id: 'P03', pos: ['15%', '14%'], data: 'RIG1-0260-ARMF-PA03' },
-  { id: 'P04', pos: ['10%', '20%'], data: 'RIG1-0260-ARMF-PA04' },
-  { id: 'P02', pos: ['50%', '14%'], data: 'RIG1-0260-ARMF-PA02' },
-  { id: 'P01', pos: ['50%', '22%'], data: 'RIG1-0260-ARMF-PA01' },
-  { id: 'P01', pos: ['50%', '30%'], data: 'RIG1-0260-ARME-PA01' },
-  { id: 'P01', pos: ['50%', '38%'], data: 'RIG1-0260-ARMD-PA01' },
-  { id: 'P02', pos: ['12%', '36%'], data: 'RIG1-0260-ARMD-PA02' },
-  { id: 'P02', pos: ['16%', '27%'], data: 'RIG1-0260-ARME-PA02' },
-  { id: 'P02', pos: ['30%', '60%'], data: 'RIG1-0260-ARMB-PA02' },
-  { id: 'P02', pos: ['30%', '53%'], data: 'RIG1-0260-ARMC-PA02' },
-  { id: 'P01', pos: ['60%', '60%'], data: 'RIG1-0260-ARMB-PA01' },
-  { id: 'P01', pos: ['60%', '53%'], data: 'RIG1-0260-ARMC-PA01' },
-  { id: 'P06', pos: ['60%', '69%'], data: 'RIG1-0260-ARMA-PA06' },
-  { id: 'P05', pos: ['40%', '75%'], data: 'RIG1-0260-ARMA-PA05' },
-  { id: 'P04', pos: ['20%', '75%'], data: 'RIG1-0260-ARMA-PA04' },
-  { id: 'P02', pos: ['20%', '70%'], data: 'RIG1-0260-ARMA-PA02' },
-  { id: 'P03', pos: ['37%', '64%'], data: 'RIG1-0260-ARMA-PA03' },
-  { id: 'Portão CR120', pos: ['55%', '75%'], data: 'RIG1-CR120' },
-  { id: 'P01', pos: ['65%', '65%'], data: 'RIG1-0260-ARMA-PA01 CR150' }
-];
-
-botoes.forEach(({ id, pos, data }) => {
-  const el = document.createElement('div');
-  el.className = 'portao';
-  el.id = `portao-${id}-${data}`;
-  el.dataset.id = data;
-  el.style.top = pos[0];
-  el.style.left = pos[1];
-  el.innerText = id;
-  el.onclick = () => abrirFormulario(data);
-  container.appendChild(el);
-});
-
 function abrirFormulario(idPortao) {
   idPortaoInput.value = idPortao;
   tituloPortao.textContent = 'Portão: ' + idPortao;
@@ -156,3 +122,56 @@ function carregarStatusPortoes() {
 window.onload = () => {
   carregarStatusPortoes();
 };
+
+function mostrarPopupUltimosDados() {
+  const textarea = document.getElementById('popup-conteudo');
+  const agora = new Date().toLocaleDateString('pt-BR');
+  db.ref('portoes').get().then(snapshot => {
+    if (!snapshot.exists()) return;
+    const dados = snapshot.val();
+    let texto = `⚠ Portões ${agora}\n\n`;
+    const grupos = {};
+
+    Object.entries(dados).forEach(([id, item]) => {
+      const armazem = id.split('-')[2].substring(0, 4).toUpperCase();
+      if (!grupos[armazem]) grupos[armazem] = [];
+
+      const linha = `${item.status === 'fechado' ? '❌' : '✅'} ${id}`;
+      grupos[armazem].push({ linha, obs: item.historico?.at(-1)?.observacoes });
+    });
+
+    Object.entries(grupos).forEach(([arma, arr]) => {
+      texto += `\n${arma}\n\n`;
+      arr.forEach(({ linha, obs }) => {
+        texto += `${linha}\n`;
+        if (obs) texto += `\n- ${obs}\n`;
+      });
+    });
+
+    textarea.value = texto.trim();
+    document.getElementById('popup-dados').style.display = 'block';
+  });
+}
+
+function copiarPopupDados() {
+  const area = document.getElementById('popup-conteudo');
+  area.select();
+  document.execCommand('copy');
+}
+
+function fecharPopupDados() {
+  document.getElementById('popup-dados').style.display = 'none';
+}
+
+function baixarComoTxt() {
+  const texto = document.getElementById('popup-conteudo').value;
+  const blob = new Blob([texto], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'portoes_status.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}

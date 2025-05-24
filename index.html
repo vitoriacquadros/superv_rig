@@ -18,6 +18,20 @@
   <img src="https://i.imgur.com/MpjnPTw.png" alt="Planta da Fábrica" />
 </div>
 
+<div id="popup-dados" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; border-radius:8px; max-width:600px; padding:20px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:9999;">
+  <h3>📋 Últimos Dados de Portões</h3>
+  <textarea id="popup-conteudo" style="width:100%; height:400px; font-family:monospace; font-size:13px; padding:8px; box-sizing:border-box;">Carregando...</textarea>
+  <div style="text-align:right; margin-top:12px;">
+    <button class="botao-acao" onclick="fecharPopupDados()">Fechar</button>
+    <button class="botao-acao" onclick="copiarPopupDados()">Copiar Texto</button>
+  </div>
+</div>
+
+<!-- botão opcional para exibir -->
+<div style="text-align:center; margin-bottom:24px">
+  <button class="botao-acao" onclick="mostrarPopupUltimosDados()">📋 Ver Dados Texto</button>
+</div>
+
 <div class="overlay" id="overlay" onclick="fecharFormulario()"></div>
 
 <div class="formulario" id="formulario">
