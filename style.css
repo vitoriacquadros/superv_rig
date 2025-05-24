@@ -1,0 +1,163 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f2f6fc;
+  color: #333;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  background-color: #003366;
+  color: white;
+  padding: 15px 20px;
+  gap: 15px;
+}
+
+header img {
+  height: 40px;
+}
+
+header h1 {
+  font-size: 22px;
+  margin: 0;
+}
+
+.planta-container {
+  position: relative;
+  width: 100%;
+  max-width: 1050px;
+  margin: 20px auto;
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.planta-container img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.portao {
+  position: absolute;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  color: white;
+  background-color: rgba(0, 128, 0, 0.7);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.3s;
+  border: 1px solid rgba(0, 100, 0, 0.6);
+}
+
+.portao:hover {
+  transform: scale(1.05);
+}
+
+.portao.fechado {
+  background-color: rgba(220, 20, 60, 0.7);
+  border-color: #8b0000;
+}
+
+.portao.manutencao {
+  background-color: rgba(255, 165, 0, 0.7);
+  border-color: #cc8400;
+}
+
+.formulario {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 340px;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  z-index: 100;
+  display: none;
+}
+
+.formulario h3 {
+  margin-top: 0;
+}
+
+.formulario label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.formulario select,
+.formulario textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.formulario button {
+  margin-top: 15px;
+  padding: 10px 15px;
+  background-color: #003366;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.formulario button:hover {
+  background-color: #005599;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.4);
+  z-index: 90;
+  display: none;
+}
+
+.historico-lista {
+  margin-top: 10px;
+  max-height: 140px;
+  overflow-y: auto;
+  font-size: 12px;
+  border-top: 1px solid #ccc;
+  padding-top: 8px;
+}
+
+.toast-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 200;
+}
+
+.toast {
+  background-color: #333;
+  color: #fff;
+  padding: 12px 20px;
+  margin-top: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  animation: fadeInOut 3s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(20px); }
+  10%, 90% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-20px); }
+}
