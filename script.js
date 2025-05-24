@@ -107,11 +107,12 @@ function limparHistorico() {
 
 function salvarStatus(event) {
   event.preventDefault();
+
   const idPortao = idPortaoInput.value;
   const status = statusSelect.value;
   const observacoes = observacoesInput.value.trim();
   const ordemSAP = ordemSAPInput.value.trim();
-  const dataAtual = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+  const dataInput = document.getElementById('dataHora').value;
 
   if (!idPortao || !status) {
     alert('Por favor, selecione um status.');
@@ -119,6 +120,7 @@ function salvarStatus(event) {
   }
 
   const refPortao = db.ref('portoes/' + idPortao);
+
   refPortao.get().then(snapshot => {
     let historico = [];
     if (snapshot.exists()) {
@@ -126,16 +128,31 @@ function salvarStatus(event) {
       historico = dadosAtuais.historico || [];
     }
 
-    const dataAtual = new Date();
-    const dataFormatada = dataAtual.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-    historico.push({ status: status, observacoes: observacoes, data: dataFormatada, ordemSAP: ordemSAP });
+    // Usa data selecionada pelo usuário ou atual se estiver vazia
+    const dataFormatada = dataInput
+      ? new Date(dataInput).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
+      : new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+
+    const novoRegistro = {
+      status: status,
+      observacoes: observacoes,
+      ordemSAP: ordemSAP,
+      data: dataFormatada
+    };
+
+    historico.push(novoRegistro);
 
     refPortao.set({ status: status, historico: historico }).then(() => {
+      console.log('Salvo com sucesso:', novoRegistro);
       atualizarVisualPortao(idPortao, status);
       fecharFormulario();
+    }).catch(err => {
+      console.error('Erro ao salvar:', err);
+      alert('Erro ao salvar dados. Verifique o console.');
     });
   });
 }
+
 
 function atualizarVisualPortao(idPortao, status) {
   const botoes = document.querySelectorAll('.portao');

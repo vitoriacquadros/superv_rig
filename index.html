@@ -28,6 +28,7 @@
   <h3 id="tituloPortao">Portão</h3>
   <form id="formPortao" onsubmit="salvarStatus(event)">
     <input type="hidden" id="idPortao" />
+
     <label for="status">Status:</label>
     <select id="status" required>
       <option value="">Selecione</option>
@@ -42,15 +43,14 @@
     <label for="ordemSAP">Ordem SAP:</label>
     <input type="text" id="ordemSAP" placeholder="Número da ordem SAP" />
 
-
     <label for="dataHora">Data e Hora:</label>
-    <input type="datetime-local" id="dataHora" required />
-    
+    <input type="datetime-local" id="dataHora" />
 
     <button type="submit">Salvar</button>
   </form>
   <div class="historico-lista" id="historicoLista"></div>
 </div>
+
 
 <div id="popup-dados" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; border-radius:8px; max-width:600px; padding:20px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:9999;">
   <h3>📋 Últimos Dados de Portões</h3>
