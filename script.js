@@ -17,6 +17,7 @@ const tituloPortao = document.getElementById('tituloPortao');
 const idPortaoInput = document.getElementById('idPortao');
 const statusSelect = document.getElementById('status');
 const observacoesInput = document.getElementById('observacoes');
+const notaSAPInput = document.getElementById('notaSAP');
 const historicoLista = document.getElementById('historicoLista');
 const container = document.querySelector('.planta-container');
 
@@ -64,11 +65,17 @@ function abrirFormulario(idPortao) {
     if (snapshot.exists()) {
       const dados = snapshot.val();
       statusSelect.value = dados.status || '';
-      observacoesInput.value = '';
+
+      // Preenche a última observação e nota SAP do histórico
+      const ultimo = dados.historico?.at(-1);
+      observacoesInput.value = ultimo?.observacoes || '';
+      notaSAPInput.value = ultimo?.notaSAP || '';
+
       montarHistorico(dados.historico || []);
     } else {
       statusSelect.value = '';
       observacoesInput.value = '';
+      notaSAPInput.value = '';
       montarHistorico([]);
     }
   });
@@ -89,7 +96,7 @@ function montarHistorico(lista) {
   lista.slice().reverse().forEach(item => {
     const div = document.createElement('div');
     div.className = 'historico-item';
-    div.textContent = `${item.data} - ${item.status} - ${item.observacoes || ''}`;
+    div.textContent = `${item.data} - ${item.status} - ${item.observacoes || ''}` + (item.notaSAP ? ` (SAP: ${item.notaSAP})` : '');
     historicoLista.appendChild(div);
   });
 }
@@ -103,6 +110,8 @@ function salvarStatus(event) {
   const idPortao = idPortaoInput.value;
   const status = statusSelect.value;
   const observacoes = observacoesInput.value.trim();
+  const notaSAP = notaSAPInput.value.trim();
+  const dataAtual = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
 
   if (!idPortao || !status) {
     alert('Por favor, selecione um status.');
@@ -119,7 +128,7 @@ function salvarStatus(event) {
 
     const dataAtual = new Date();
     const dataFormatada = dataAtual.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-    historico.push({ status: status, observacoes: observacoes, data: dataFormatada });
+    historico.push({ status: status, observacoes: observacoes, data: dataFormatada, notaSAP: notaSAP });
 
     refPortao.set({ status: status, historico: historico }).then(() => {
       atualizarVisualPortao(idPortao, status);
@@ -194,7 +203,6 @@ function mostrarPopupUltimosDados() {
     alert('Erro ao carregar dados. Tente novamente mais tarde.');
   });
 }
-
 
 function copiarPopupDados() {
   const area = document.getElementById('popup-conteudo');
