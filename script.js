@@ -217,4 +217,40 @@ function baixarComoTxt() {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+
+  function baixarHistoricoXLSX() {
+  const idPortao = idPortaoInput.value;
+  if (!idPortao) {
+    alert('Abra um portão primeiro.');
+    return;
+  }
+
+  const refPortao = db.ref('portoes/' + idPortao);
+  refPortao.get().then(snapshot => {
+    if (!snapshot.exists()) {
+      alert('Nenhum histórico encontrado.');
+      return;
+    }
+
+    const dados = snapshot.val();
+    const historico = dados.historico || [];
+
+    if (historico.length === 0) {
+      alert('Nenhum dado no histórico.');
+      return;
+    }
+
+    // Criar planilha
+    const worksheet = XLSX.utils.json_to_sheet(historico);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Histórico');
+
+    // Baixar
+    XLSX.writeFile(workbook, `historico-${idPortao}.xlsx`);
+  }).catch(err => {
+    console.error('Erro ao buscar histórico:', err);
+    alert('Erro ao gerar Excel. Veja o console.');
+  });
+}
+
 }

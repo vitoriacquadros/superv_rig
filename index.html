@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="style.css">
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+<script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 </head>
 <body>
 <header>
@@ -44,6 +45,8 @@
   <div class="historico-lista" id="historicoLista"></div>
 </div>
 
+<button type="button" onclick="baixarHistoricoXLSX()">📥 Baixar Excel</button>
+
 <div id="popup-dados" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; border-radius:8px; max-width:600px; padding:20px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:9999;">
   <h3>📋 Últimos Dados de Portões</h3>
   <textarea id="popup-conteudo" style="width:100%; height:400px; font-family:monospace; font-size:13px; padding:8px; box-sizing:border-box;">Carregando...</textarea>
@@ -52,6 +55,9 @@
     <button class="botao-acao" onclick="copiarPopupDados()">Copiar Texto</button>
   </div>
 </div>
+
+<footer>
+  <p>Developer Vitória Quadros - Maintenance Support <a href="
 <script src="script.js"></script>
 </body>
 </html>
