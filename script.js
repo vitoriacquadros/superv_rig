@@ -173,8 +173,9 @@ function mostrarPopupUltimosDados() {
 
     Object.entries(dados).forEach(([id, item]) => {
       // Verifica se existe parte [2] antes de usar .split('-')[2]
-      const partes = id.split('-');
-      const armazem = partes[2] ? partes[2].substring(0, 4).toUpperCase() : 'OUTROS';
+     const partes = id.split('-');
+     const armazem = partes[2] ? partes[2].substring(0, 4).toUpperCase() : 'OUTRO';
+
 
       if (!grupos[armazem]) grupos[armazem] = [];
 
@@ -186,22 +187,19 @@ function mostrarPopupUltimosDados() {
       grupos[armazem].push({ linha, obs });
     });
 
-    Object.entries(grupos).forEach(([arma, arr]) => {
-      texto += `\n${arma}\n\n`;
-      arr.forEach(({ linha, obs }) => {
-        texto += `${linha}\n`;
-        if (obs) texto += `- ${obs}\n`;
-      });
-    });
+    Object.entries(dados).forEach(([id, item]) => {
+    const partes = id.split('-');
+    const armazem = partes[2] ? partes[2].substring(0, 4).toUpperCase() : 'OUTRO';
 
-    textarea.value = texto.trim();
-    document.getElementById('popup-dados').style.display = 'block';
+    if (!grupos[armazem]) grupos[armazem] = [];
 
-  }).catch(error => {
-    console.error('Erro ao buscar dados:', error);
-    alert('Erro ao carregar dados. Veja o console.');
-  });
-}
+    const status = item.status || 'desconhecido';
+    const ultimoHistorico = Array.isArray(item.historico) ? item.historico.at(-1) : null;
+    const obs = ultimoHistorico?.observacoes || '';
+
+    const linha = `${status === 'fechado' ? '❌' : '✅'} ${id}`;
+    grupos[armazem].push({ linha, obs });
+});
 
 
 function copiarPopupDados() {
