@@ -217,8 +217,10 @@ function baixarComoTxt() {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+  
+}
 
-  function baixarHistoricoXLSX() {
+ function baixarHistoricoXLSX() {
   const idPortao = idPortaoInput.value;
   if (!idPortao) {
     alert('Abra um portão primeiro.');
@@ -252,5 +254,5 @@ function baixarComoTxt() {
     alert('Erro ao gerar Excel. Veja o console.');
   });
 }
-
-}
+// Adicionar evento de clique para o botão de baixar histórico
+document.getElementById('baixarHistorico').addEventListener('click', baixarHistoricoXLSX);
