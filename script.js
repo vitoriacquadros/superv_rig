@@ -23,14 +23,14 @@ const container = document.querySelector('.planta-container');
 const botoes = [
   { id: 'P03', pos: ['15%', '14%'], data: 'RIG1-0260-ARMF-PA03' },
   { id: 'P04', pos: ['10%', '20%'], data: 'RIG1-0260-ARMF-PA04' },
-  { id: 'P01', pos: ['50%', '14%'], data: 'RIG1-0260-ARMF-PA01' },
-  { id: 'P02', pos: ['50%', '22%'], data: 'RIG1-0260-ARMF-PA02' },
+  { id: 'P02', pos: ['50%', '14%'], data: 'RIG1-0260-ARMF-PA02' },
+  { id: 'P01', pos: ['50%', '22%'], data: 'RIG1-0260-ARMF-PA01' },
   { id: 'P01', pos: ['50%', '30%'], data: 'RIG1-0260-ARME-PA01' },
   { id: 'P01', pos: ['50%', '38%'], data: 'RIG1-0260-ARMD-PA01' },
   { id: 'P02', pos: ['12%', '36%'], data: 'RIG1-0260-ARMD-PA02' },
   { id: 'P02', pos: ['16%', '27%'], data: 'RIG1-0260-ARME-PA02' },
-  { id: 'P02', pos: ['35%', '60%'], data: 'RIG1-0260-ARMB-PA02' },
-  { id: 'P02', pos: ['35%', '53%'], data: 'RIG1-0260-ARMC-PA02' },
+  { id: 'P02', pos: ['30%', '60%'], data: 'RIG1-0260-ARMB-PA02' },
+  { id: 'P02', pos: ['30%', '53%'], data: 'RIG1-0260-ARMC-PA02' },
   { id: 'P01', pos: ['60%', '60%'], data: 'RIG1-0260-ARMB-PA01' },
   { id: 'P01', pos: ['60%', '53%'], data: 'RIG1-0260-ARMC-PA01' },
   { id: 'P06', pos: ['60%', '69%'], data: 'RIG1-0260-ARMA-PA06' },
@@ -217,10 +217,8 @@ function baixarComoTxt() {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  
-}
 
- function baixarHistoricoXLSX() {
+  function baixarHistoricoXLSX() {
   const idPortao = idPortaoInput.value;
   if (!idPortao) {
     alert('Abra um portão primeiro.');
@@ -254,5 +252,5 @@ function baixarComoTxt() {
     alert('Erro ao gerar Excel. Veja o console.');
   });
 }
-// Adicionar evento de clique para o botão de baixar histórico
-document.getElementById('baixarHistorico').addEventListener('click', baixarHistoricoXLSX);
+
+}
