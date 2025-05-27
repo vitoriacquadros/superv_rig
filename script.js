@@ -206,40 +206,49 @@ window.onload = () => {
 function mostrarPopupUltimosDados() {
   const textarea = document.getElementById('popup-conteudo');
   const agora = new Date().toLocaleDateString('pt-BR');
-  
+
   db.ref('portoes').get().then(snapshot => {
     if (!snapshot.exists()) {
       alert('Nenhum dado encontrado.');
       return;
     }
-    
+
     const dados = snapshot.val();
     let texto = `⚠ Portões ${agora}\n\n`;
     const grupos = {};
 
     Object.entries(dados).forEach(([id, item]) => {
-      const armazem = id.split('-')[2].substring(0, 4).toUpperCase();
+      // Proteção contra IDs malformados
+      const partes = id.split('-');
+      const armazem = partes[2] ? partes[2].substring(0, 4).toUpperCase() : 'OUTROS';
+
       if (!grupos[armazem]) grupos[armazem] = [];
 
-      const linha = `${item.status === 'fechado' ? '❌' : '✅'} ${id}`;
-      grupos[armazem].push({ linha, obs: item.historico?.at(-1)?.observacoes });
+      const status = item.status || 'desconhecido';
+      const ultimo = Array.isArray(item.historico) ? item.historico.at(-1) : null;
+      const obs = ultimo?.observacoes || '';
+
+      const linha = `${status === 'fechado' ? '❌' : '✅'} ${id}`;
+      grupos[armazem].push({ linha, obs });
     });
 
     Object.entries(grupos).forEach(([arma, arr]) => {
       texto += `\n${arma}\n\n`;
       arr.forEach(({ linha, obs }) => {
         texto += `${linha}\n`;
-        if (obs) texto += `\n- ${obs}\n`;
+        if (obs) texto += `- ${obs}\n`;
       });
     });
 
     textarea.value = texto.trim();
     document.getElementById('popup-dados').style.display = 'block';
+
   }).catch(error => {
     console.error('Erro ao buscar dados:', error);
     alert('Erro ao carregar dados. Tente novamente mais tarde.');
   });
 }
+
 
 function copiarPopupDados() {
   const area = document.getElementById('popup-conteudo');
