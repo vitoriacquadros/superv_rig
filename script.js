@@ -218,9 +218,9 @@ function mostrarPopupUltimosDados() {
     const grupos = {};
 
     Object.entries(dados).forEach(([id, item]) => {
-      // Proteção contra IDs malformados
+      // Protege contra erro de substring em IDs inválidos
       const partes = id.split('-');
-      const armazem = partes[2] ? partes[2].substring(0, 4).toUpperCase() : 'OUTROS';
+      const armazem = partes.length >= 3 ? partes[2].substring(0, 4).toUpperCase() : 'OUTROS';
 
       if (!grupos[armazem]) grupos[armazem] = [];
 
@@ -248,6 +248,7 @@ function mostrarPopupUltimosDados() {
     alert('Erro ao carregar dados. Tente novamente mais tarde.');
   });
 }
+
 
 
 function copiarPopupDados() {
