@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="style.css">
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-<script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 </head>
 <body>
 <header>
@@ -40,12 +39,17 @@
     <label for="observacoes">Observações:</label>
     <textarea id="observacoes" rows="3" placeholder="Equipe, data, hora, etc."></textarea>
 
+    <label for="ordemSAP">ordem SAP:</label>
+<   <input type="text" id="ordemSAP" placeholder="Número da ordem SAP" />
+
+    <label for="dataHora">Data e Hora:</label>
+    <input type="datetime-local" id="dataHora" required />
+    
+
     <button type="submit">Salvar</button>
   </form>
   <div class="historico-lista" id="historicoLista"></div>
 </div>
-
-<button type="button" onclick="baixarHistoricoXLSX()">📥 Baixar Excel</button>
 
 <div id="popup-dados" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; border-radius:8px; max-width:600px; padding:20px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:9999;">
   <h3>📋 Últimos Dados de Portões</h3>
@@ -55,9 +59,6 @@
     <button class="botao-acao" onclick="copiarPopupDados()">Copiar Texto</button>
   </div>
 </div>
-
-<footer>
-  <p>Developer Vitória Quadros - Maintenance Support <a href="
 <script src="script.js"></script>
 </body>
 </html>
