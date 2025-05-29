@@ -42,13 +42,24 @@
     <img src="https://i.imgur.com/MpjnPTw.png" alt="Planta da Fábrica" />
   </div>
 
-  <div style="text-align:center; margin-bottom:24px">
+  <div style="text-align:center; margin:24px 0;">
     <button class="botao-acao" onclick="mostrarPopupUltimosDados()">📋 Ver Dados Texto</button>
-    <button class="botao-acao" onclick="baixarComoPlanilha()">⬇ Baixar Planilha Excel</button> <!-- NOVO BOTÃO -->
+    <button class="botao-acao" onclick="baixarComoPlanilha()">⬇ Baixar Planilha Excel</button>
   </div>
 
-  <!-- Resto do código permanece igual... -->
+  <!-- Popup de dados com textarea -->
+  <div id="popup-dados" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; border-radius:8px; max-width:600px; padding:20px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:9999;">
+    <h3>📋 Últimos Dados de Portões</h3>
+    <textarea id="popup-conteudo" style="width:100%; height:400px; font-family:monospace; font-size:13px; padding:8px; box-sizing:border-box;">Carregando...</textarea>
+    <div style="text-align:right; margin-top:12px;">
+      <button class="botao-acao" onclick="fecharPopupDados()">Fechar</button>
+      <button class="botao-acao" onclick="copiarPopupDados()">Copiar Texto</button>
+      <button class="botao-acao" onclick="baixarComoTxt()">Baixar .txt</button>
+    </div>
+  </div>
+</div>
 
-  <script src="script.js"></script>
+<!-- Seu script.js deve ser importado corretamente -->
+<script src="script.js"></script>
 </body>
-</html>
+</html>  

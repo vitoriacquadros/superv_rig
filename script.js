@@ -72,7 +72,7 @@ const botoes = [
   { id: 'P03', pos: ['15%', '14%'], data: 'RIG1-0260-ARMF-PA03 (Portão lado rodovia 01 - Movimentação)' },
   { id: 'P04', pos: ['10%', '20%'], data: 'RIG1-0260-ARMF-PA04 (Portão lado rodovia 02 - Misturas)' },
   { id: 'P02', pos: ['50%', '14%'], data: 'RIG1-0260-ARMF-PA02 (Portão lado píer 02 - Misturas)' },
-  { id: 'P01', pos: ['50%', '22%'], data: 'RIG1-0260-ARMF-PA01 (Portão lado píer 01 - Movimentação' },
+  { id: 'P01', pos: ['50%', '22%'], data: 'RIG1-0260-ARMF-PA01 (Portão lado píer 01 - Movimentação)' },
   { id: 'P01', pos: ['50%', '30%'], data: 'RIG1-0260-ARME-PA01 (Portão lado píer)' },
   { id: 'P01', pos: ['50%', '38%'], data: 'RIG1-0260-ARMD-PA01 (Portão lado píer)' },
   { id: 'P02', pos: ['12%', '36%'], data: 'RIG1-0260-ARMD-PA02 (Portão lado rodovia)' },
@@ -93,7 +93,7 @@ const botoes = [
 botoes.forEach(({ id, pos, data }) => {
   const el = document.createElement('div');
   el.className = 'portao';
-  el.id = `portao-${id}-${data}`;
+  el.id = portao-${id}-${data};
   el.dataset.id = data;
   el.style.top = pos[0];
   el.style.left = pos[1];
@@ -150,9 +150,9 @@ function montarHistorico(lista) {
 
     const div = document.createElement('div');
     div.className = 'historico-item';
-    div.textContent = `${item.data} - ${item.status} - ${item.observacoes || ''}` + 
-    (item.ordemSAP1 ? ` (${item.ordemSAP1})` : '') + 
-    (item.ordemSAP ? ` (SAP: ${item.ordemSAP})` : '');
+    div.textContent = ${item.data} - ${item.status} - ${item.observacoes || ''} + 
+    (item.ordemSAP1 ?  (${item.ordemSAP1}) : '') + 
+    (item.ordemSAP ?  (SAP: ${item.ordemSAP}) : '');
 
 
     div.addEventListener('click', () => {
@@ -271,7 +271,7 @@ function mostrarPopupUltimosDados() {
     }
 
     const dados = snapshot.val();
-    let texto = `⚠ Portões ${agora}\n\n`;
+    let texto = ⚠ Portões ${agora}\n\n;
     const grupos = {};
 
     Object.entries(dados).forEach(([id, item]) => {
@@ -290,30 +290,28 @@ function mostrarPopupUltimosDados() {
 
       let linha = `${status === 'Inoperante' ? '❌' : '✅'} ${id}`;
 
-      if (sapTitulo || sap) linha += `\n- SAP: ${sapTitulo}${sap ? ` (Nº ${sap})` : ''}`;
-      if (sapStatus) linha += `\n- Status SAP: ${sapStatus}`;
-      if (obs) linha += `\n- Obs: ${obs}`;
+      if (sapTitulo || sap) linha += \n- SAP: ${sapTitulo}${sap ?  (Nº ${sap}) : ''};
+      if (sapStatus) linha += \n- Status SAP: ${sapStatus};
+      if (obs) linha += \n- Obs: ${obs};
 
-      grupos[armazem].push(linha);
-    });
+      grupos[armazem].push(linha);});
 
     Object.entries(grupos).forEach(([arma, linhas]) => {
-      texto += `\n${arma}\n\n`;
+      texto += \n${arma}\n\n;
       linhas.forEach(linha => {
-        texto += `${linha}\n\n`;
+         texto += ${linha}\n\n;
       });
-    });
+  });
 
     textarea.value = texto.trim();
     document.getElementById('popup-dados').style.display = 'block';
-
-  }).catch(error => {
+}).catch(error => {
     console.error('Erro ao buscar dados:', error);
     alert('Erro ao carregar dados. Tente novamente mais tarde.');
   });
 }
 
-
+''
 function copiarPopupDados() {
   const area = document.getElementById('popup-conteudo');
   area.select();
