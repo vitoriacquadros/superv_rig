@@ -1,7 +1,6 @@
-//@author: vitoria quadros 
-// @description: Script para gerenciar o status dos portões do Armazém Rig, com integração ao Firebase Realtime Database.
-// @version: 1.0
-// script.js
+///@author: Vitória Quadros
+//@description: Script para gerenciar o status dos portões do Armazém Rig, com autenticação Firebase
+
 const firebaseConfig = {
   apiKey: "AIzaSyBNLGsUrMFLSA9NmqkKPlouWeO7ttvM6Fc",
   authDomain: "armazensrig.firebaseapp.com",
@@ -11,12 +10,15 @@ const firebaseConfig = {
   messagingSenderId: "561768076694",
   appId: "1:561768076694:web:3f9cba366f19eed543f9b7"
 };
-// Configuração Firebase
-ffirebase.initializeApp(firebaseConfig);
+
+// Inicializa Firebase
+firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
+// Inicializa FirebaseUI Auth
 const ui = new firebaseui.auth.AuthUI(firebase.auth());
 
+// Verifica login
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
     document.body.classList.remove("auth-loading");
@@ -33,7 +35,7 @@ firebase.auth().onAuthStateChanged(user => {
     });
   }
 });
-const db = firebase.database();
+
 
 const overlay = document.getElementById('overlay');
 const formulario = document.getElementById('formulario');
