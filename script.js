@@ -66,8 +66,23 @@ const botoes = [
   { id: 'P04', pos: ['10%', '20%'], data: 'RIG1-0260-ARMF-PA04 (Portão lado rodovia 02 - Misturas)' },
   { id: 'P02', pos: ['50%', '14%'], data: 'RIG1-0260-ARMF-PA02 (Portão lado píer 02 - Misturas)' },
   { id: 'P01', pos: ['50%', '22%'], data: 'RIG1-0260-ARMF-PA01 (Portão lado píer 01 - Movimentação)' },
-  // (adicione os demais aqui como desejar)
+  { id: 'P01', pos: ['50%', '30%'], data: 'RIG1-0260-ARME-PA01 (Portão lado píer)' },
+  { id: 'P01', pos: ['50%', '38%'], data: 'RIG1-0260-ARMD-PA01 (Portão lado píer)' },
+  { id: 'P02', pos: ['12%', '36%'], data: 'RIG1-0260-ARMD-PA02 (Portão lado rodovia)' },
+  { id: 'P02', pos: ['16%', '27%'], data: 'RIG1-0260-ARME-PA02 (Portão lado rodovia)' },
+  { id: 'P02', pos: ['30%', '60%'], data: 'RIG1-0260-ARMB-PA02 (Portão lado rodovia)' },
+  { id: 'P02', pos: ['30%', '53%'], data: 'RIG1-0260-ARMC-PA02 (Portão lado rodovia)' },
+  { id: 'P01', pos: ['60%', '60%'], data: 'RIG1-0260-ARMB-PA01 (Portão lado píer)' },
+  { id: 'P01', pos: ['60%', '53%'], data: 'RIG1-0260-ARMC-PA01 (Portão lado píer)' },
+  { id: 'P06', pos: ['60%', '69%'], data: 'RIG1-0260-ARMA-PA06 (Portão lado Píer CR110)' },
+  { id: 'P05', pos: ['40%', '75%'], data: 'RIG1-0260-ARMA-PA05 (Portão lado central CR120/Etel)' },
+  { id: 'P04', pos: ['20%', '75%'], data: 'RIG1-0260-ARMA-PA04 (Portão lado rodovia CURA)' },
+  { id: 'P02', pos: ['20%', '70%'], data: 'RIG1-0260-ARMA-PA02 (Portão lado rodovia CR185)' },
+  { id: 'P03', pos: ['37%', '64%'], data: 'RIG1-0260-ARMA-PA03 (Portão lado central CR150)' },
+  { id: 'Portão CR120', pos: ['55%', '75%'], data: 'RIG1-CR120' },
+  { id: 'P01', pos: ['65%', '65%'], data: 'RIG1-0260-ARMA-PA01 CR150' }
 ];
+
 
 function abrirFormulario(idPortao) {
   idPortaoInput.value = idPortao;
