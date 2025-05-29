@@ -1,80 +1,64 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Supervisório - Portões</title>
-  <link rel="stylesheet" href="style.css">
-
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.2/firebase-ui-auth.css" />
-  <script src="https://www.gstatic.com/firebasejs/ui/6.0.2/firebase-ui-auth.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Supervisório - Portões</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 </head>
-<body style="display:none;">
-  <header>
-    <img src="https://i.imgur.com/PazFZ1y.png" alt="Logo da Empresa" />
-    <h1>Supervisório - Portões de Armazéns Yara</h1>
-    <div id="user-info" style="margin-left:auto; text-align:right;">
-      <span id="user-name"></span><br />
-      <span id="user-email" style="font-size: 12px;"></span>
-    </div>
-  </header>
+<body>
+<header>
+  <img src="https://i.imgur.com/PazFZ1y.png" alt="Logo da Empresa" />
+  <h1>Supervisório - Portões de Armazéns Yara</h1>
+</header>
 
-  <div id="firebase-auth-container" style="display:none; text-align:center; padding:30px">
-    <h3>Login Necessário</h3>
-    <div id="firebaseui-auth-container"></div>
+<div class="planta-container">
+  <img src="https://i.imgur.com/MpjnPTw.png" alt="Planta da Fábrica" />
+</div>
+
+<div style="text-align:center; margin-bottom:24px">
+  <button class="botao-acao" onclick="mostrarPopupUltimosDados()">📋 Ver Dados Texto</button>
+</div>
+
+<div class="overlay" id="overlay" onclick="fecharFormulario()"></div>
+
+<div class="formulario" id="formulario">
+  <h3 id="tituloPortao">Portão</h3>
+  <form id="formPortao" onsubmit="salvarStatus(event)">
+    <input type="hidden" id="idPortao" />
+    <label for="status">Status:</label>
+    <select id="status" required>
+      <option value="">Selecione</option>
+      <option value="aberto">Aberto</option>
+      <option value="fechado">Fechado</option>
+      <option value="manutencao">Em manutenção</option>
+    </select>
+
+    <label for="observacoes">Observações:</label>
+    <textarea id="observacoes" rows="3" placeholder="Equipe, data, hora, etc."></textarea>
+
+    <label for="ordemSAP">ordem SAP:</label>
+<   <input type="text" id="ordemSAP" placeholder="Número da ordem SAP" />
+
+    <label for="dataHora">Data e Hora:</label>
+    <input type="datetime-local" id="dataHora" required />
+    
+
+    <button type="submit">Salvar</button>
+  </form>
+  <div class="historico-lista" id="historicoLista"></div>
+</div>
+
+<div id="popup-dados" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; border-radius:8px; max-width:600px; padding:20px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:9999;">
+  <h3>📋 Últimos Dados de Portões</h3>
+  <textarea id="popup-conteudo" style="width:100%; height:400px; font-family:monospace; font-size:13px; padding:8px; box-sizing:border-box;">Carregando...</textarea>
+  <div style="text-align:right; margin-top:12px;">
+    <button class="botao-acao" onclick="fecharPopupDados()">Fechar</button>
+    <button class="botao-acao" onclick="copiarPopupDados()">Copiar Texto</button>
   </div>
-
-  <div class="planta-container">
-    <img src="https://i.imgur.com/MpjnPTw.png" alt="Planta da Fábrica" />
-  </div>
-
-  <div style="text-align:center; margin-bottom:24px">
-    <button class="botao-acao" onclick="mostrarPopupUltimosDados()">📋 Ver Dados Texto</button>
-    <button class="botao-acao" onclick="baixarComoTxt()">💾 Salvar .txt</button>
-    <button class="botao-acao" onclick="downloadxlsx()">📥 Exportar .xlsx</button>
-  </div>
-
-  <div class="overlay" id="overlay" onclick="fecharFormulario()"></div>
-
-  <div class="formulario" id="formulario">
-    <h3 id="tituloPortao">Portão</h3>
-    <form id="formPortao" onsubmit="salvarStatus(event)">
-      <input type="hidden" id="idPortao" />
-      <label for="status">Status:</label>
-      <select id="status" required>
-        <option value="">Selecione</option>
-        <option value="aberto">Aberto</option>
-        <option value="fechado">Fechado</option>
-        <option value="manutencao">Em manutenção</option>
-      </select>
-
-      <label for="observacoes">Observações:</label>
-      <textarea id="observacoes" rows="3" placeholder="Equipe, data, hora, etc."></textarea>
-
-      <label for="ordemSAP">Ordem SAP:</label>
-      <input type="text" id="ordemSAP" placeholder="Número da ordem SAP" />
-
-      <label for="dataHora">Data e Hora:</label>
-      <input type="datetime-local" id="dataHora" required />
-
-      <button type="submit">Salvar</button>
-    </form>
-    <div class="historico-lista" id="historicoLista"></div>
-  </div>
-
-  <div id="popup-dados" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; border-radius:8px; max-width:600px; padding:20px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:9999;">
-    <h3>📋 Últimos Dados de Portões</h3>
-    <textarea id="popup-conteudo" style="width:100%; height:400px; font-family:monospace; font-size:13px; padding:8px; box-sizing:border-box;">Carregando...</textarea>
-    <div style="text-align:right; margin-top:12px;">
-      <button class="botao-acao" onclick="fecharPopupDados()">Fechar</button>
-      <button class="botao-acao" onclick="copiarPopupDados()">Copiar Texto</button>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
+</div>
+<script src="script.js"></script>
 </body>
 </html>

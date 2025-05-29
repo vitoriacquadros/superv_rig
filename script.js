@@ -12,45 +12,6 @@ const firebaseConfig = {
   appId: "1:561768076694:web:3f9cba366f19eed543f9b7"
 };
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const ui = new firebaseui.auth.AuthUI(auth);
-
-function iniciarAutenticacao() {
-  document.body.style.display = 'none';
-  document.getElementById('firebase-auth-container').style.display = 'block';
-
-  ui.start('#firebaseui-auth-container', {
-    signInOptions: [
-      firebase.auth.EmailAuthProvider.PROVIDER_ID,
-      firebase.auth.GoogleAuthProvider.PROVIDER_ID
-    ],
-    callbacks: {
-      signInSuccessWithAuthResult: function() {
-        document.getElementById('firebase-auth-container').style.display = 'none';
-        document.body.style.display = '';
-        return false;
-      }
-    }
-  });
-}
-
-auth.onAuthStateChanged(user => {
-  if (user) {
-    document.getElementById('firebase-auth-container').style.display = 'none';
-    document.body.style.display = '';
-    const userName = user.displayName || '(sem nome)';
-    const userEmail = user.email || '';
-    const nameEl = document.getElementById('user-name');
-    const emailEl = document.getElementById('user-email');
-    if (nameEl && emailEl) {
-      nameEl.textContent = userName;
-      emailEl.textContent = userEmail;
-    }
-  } else {
-    iniciarAutenticacao();
-  }
-});
-
 const db = firebase.database();
 
 const overlay = document.getElementById('overlay');
@@ -315,17 +276,3 @@ function baixarComoTxt() {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
-
-function downloadxlsx(){
-  const texto = document.getElementById('popup-conteudo').value;
-  const blob = new Blob([texto], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'portoes_status.xlsx';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-
