@@ -34,6 +34,7 @@ firebase.auth().onAuthStateChanged(user => {
   }
 });
 
+
 const db = firebase.database();
 
 const overlay = document.getElementById('overlay');
