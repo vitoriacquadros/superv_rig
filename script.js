@@ -29,10 +29,17 @@ firebase.auth().onAuthStateChanged(user => {
     document.body.classList.remove("auth-logged-in");
     document.body.classList.add("auth-loading");
 
-    ui.start("#firebaseui-auth-container", {
-      signInOptions: [firebase.auth.EmailAuthProvider.PROVIDER_ID],
-      signInSuccessUrl: window.location.href
-    });
+ui.start("#firebaseui-auth-container", {
+  signInOptions: [
+    {
+      provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+      disableSignUp: {
+        status: true
+      }
+    }
+  ],
+  signInSuccessUrl: window.location.href
+});
   }
 });
 
