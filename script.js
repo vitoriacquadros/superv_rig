@@ -11,7 +11,29 @@ const firebaseConfig = {
   messagingSenderId: "561768076694",
   appId: "1:561768076694:web:3f9cba366f19eed543f9b7"
 };
+// Configuração Firebase
 firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// Inicializa UI de autenticação
+const ui = new firebaseui.auth.AuthUI(firebase.auth());
+
+// Controle de login
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    document.body.classList.remove("auth-loading");
+    document.body.classList.add("auth-logged-in");
+    document.getElementById("user-name").textContent = user.displayName || "Usuário";
+    document.getElementById("user-email").textContent = user.email;
+  } else {
+    document.body.classList.add("auth-loading");
+    ui.start("#firebaseui-auth-container", {
+      signInOptions: [firebase.auth.EmailAuthProvider.PROVIDER_ID],
+      signInSuccessUrl: window.location.href
+    });
+  }
+});
+
 const db = firebase.database();
 
 const overlay = document.getElementById('overlay');

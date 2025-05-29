@@ -1,112 +1,48 @@
-/* style.css */
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #0e62df89;
+body.auth-loading #conteudo {
+  display: none;
+}
+body.auth-logged-in #firebase-auth-container {
+  display: none;
+}
+body.auth-logged-in #conteudo {
+  display: block;
 }
 
 header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: left;
   padding: 10px 20px;
   background-color: #003366;
   color: white;
 }
 
-header img {
-  height: 40px;
-  margin-right: 15px;
+#user-info {
+  font-size: 14px;
+  text-align: right;
 }
 
-header h1 {
-  font-size: 22px;
-  margin: 0;
+.botao-acao {
+  margin: 5px;
+  padding: 8px 12px;
+  background-color: #0069d9;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-.planta-container {
-  position: relative;
-  width: 100%;
-  max-width: 1050px;
-  margin: 20px auto;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  border-radius: 8px;
-  overflow: hidden;
-  background: white;
+.popup-botoes {
+  text-align: right;
+  margin-top: 12px;
 }
 
 .planta-container img {
-  width: 100%;
-  height: auto;
+  max-width: 100%;
   display: block;
 }
 
-.portao {
-  position: absolute;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: bold;
-  color: #fff;
-  padding: 2px 6px;
-  cursor: pointer;
-  user-select: none;
-  background-color: rgba(0,128,0,0.6);
-  border: 1px solid #006400;
-  transition: background-color 0.3s;
-}
-
-.portao.fechar {
-  background-color: rgba(255,0,0,0.6);
-  border: 1px solid #aa0000;
-}
-
-.portao.manutencao {
-  background-color: rgba(255,165,0,0.6);
-  border: 1px solid #cc8400;
-}
-
-.formulario {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: white;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.4);
-  display: none;
-  z-index: 100;
-  width: 320px;
-}
-
-.formulario label {
-  display: block;
-  margin-top: 10px;
-}
-
-.formulario input[type=text],
-.formulario select,
-.formulario textarea {
-  width: 100%;
-  padding: 6px;
-  margin-top: 5px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-  font-size: 14px;
-}
-
-.formulario button {
-  margin-top: 15px;
-  padding: 8px 15px;
-  background-color: #003366;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.popup-dados {
+#popup-dados {
   display: none;
   position: fixed;
   top: 50%; left: 50%;
@@ -118,7 +54,8 @@ header h1 {
   box-shadow: 0 0 10px rgba(0,0,0,0.3);
   z-index: 9999;
 }
-.popup-dados textarea {
+
+#popup-conteudo {
   width: 100%;
   height: 400px;
   font-family: monospace;
@@ -126,28 +63,3 @@ header h1 {
   padding: 8px;
   box-sizing: border-box;
 }
-
-
-.overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  background-color: rgba(0,0,0,0.5);
-  display: none;
-  z-index: 50;
-}
-
-.historico-lista {
-  max-height: 150px;
-  overflow-y: auto;
-  margin-top: 10px;
-  border-top: 1px solid #ddd;
-  font-size: 12px;
-}
-
-.historico-item {
-  padding: 5px;
-  border-bottom: 1px solid #eee;
-}
-
-body { display: none; }
