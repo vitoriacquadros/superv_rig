@@ -12,13 +12,11 @@ const firebaseConfig = {
   appId: "1:561768076694:web:3f9cba366f19eed543f9b7"
 };
 // Configuração Firebase
-firebase.initializeApp(firebaseConfig);
+ffirebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// Inicializa UI de autenticação
 const ui = new firebaseui.auth.AuthUI(firebase.auth());
 
-// Controle de login
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
     document.body.classList.remove("auth-loading");
@@ -26,15 +24,15 @@ firebase.auth().onAuthStateChanged(user => {
     document.getElementById("user-name").textContent = user.displayName || "Usuário";
     document.getElementById("user-email").textContent = user.email;
   } else {
+    document.body.classList.remove("auth-logged-in");
     document.body.classList.add("auth-loading");
+
     ui.start("#firebaseui-auth-container", {
       signInOptions: [firebase.auth.EmailAuthProvider.PROVIDER_ID],
       signInSuccessUrl: window.location.href
     });
   }
 });
-
-
 const db = firebase.database();
 
 const overlay = document.getElementById('overlay');
