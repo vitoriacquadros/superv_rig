@@ -1,6 +1,4 @@
-///@author: Vitória Quadros
-//@description: Script para gerenciar o status dos portões do Armazém Rig, com autenticação Firebase
-
+// firebaseConfig.js ou no início do seu script.js
 const firebaseConfig = {
   apiKey: "AIzaSyBNLGsUrMFLSA9NmqkKPlouWeO7ttvM6Fc",
   authDomain: "armazensrig.firebaseapp.com",
@@ -11,42 +9,43 @@ const firebaseConfig = {
   appId: "1:561768076694:web:3f9cba366f19eed543f9b7"
 };
 
-// Inicializa Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// Inicializa FirebaseUI Auth
-const ui = new firebaseui.auth.AuthUI(firebase.auth());
-
-// Verifica login
-firebase.auth().onAuthStateChanged(user => {
-  if (user) {
-    document.body.classList.remove("auth-loading");
-    document.body.classList.add("auth-logged-in");
-    document.getElementById("user-name").textContent = user.displayName || "Usuário";
-    document.getElementById("user-email").textContent = user.email;
-  } else {
-    document.body.classList.remove("auth-logged-in");
-    document.body.classList.add("auth-loading");
-
+// Referência aos elementos
 const loginForm = document.getElementById('login-form');
 const loginError = document.getElementById('login-error');
+const conteudo = document.getElementById('conteudo');
+const authContainer = document.getElementById('firebase-auth-container');
 
+// Escutador de login
 loginForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const email = document.getElementById('login-email').value;
-  const password = document.getElementById('login-password').value;
+  const senha = document.getElementById('login-password').value;
 
-  firebase.auth().signInWithEmailAndPassword(email, password)
-    .then(() => {
-      loginError.textContent = '';
-      document.body.classList.remove("auth-loading");
-      document.body.classList.add("auth-logged-in");
+  firebase.auth().signInWithEmailAndPassword(email, senha)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      document.getElementById("user-name").textContent = user.displayName || "Usuário";
+      document.getElementById("user-email").textContent = user.email;
+      authContainer.style.display = 'none';
+      conteudo.style.display = 'block';
     })
     .catch((error) => {
+      console.error("Erro ao fazer login:", error);
       loginError.textContent = "Email ou senha inválidos.";
-      console.error("Erro no login:", error);
     });
+});
+
+// Mantém usuário logado ao recarregar
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    document.getElementById("user-name").textContent = user.displayName || "Usuário";
+    document.getElementById("user-email").textContent = user.email;
+    document.getElementById('firebase-auth-container').style.display = 'none';
+    document.getElementById('conteudo').style.display = 'block';
+  }
 });
 
 
