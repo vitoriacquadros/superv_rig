@@ -174,6 +174,8 @@ function salvarStatus(event) {
   const status = statusSelect.value;
   const observacoes = observacoesInput.value.trim();
   const ordemSAP = ordemSAPInput.value.trim();
+  const statusSAP = statusSAPSelect.value; 
+
 
   if (!idPortao || !status) {
     alert('Por favor, selecione um status.');
@@ -192,13 +194,14 @@ function salvarStatus(event) {
     const dataAtual = new Date();
     const dataFormatada = dataAtual.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
 
-    const novoRegistro = {
-    status: status,
-    observacoes: observacoes,
-    ordemSAP: ordemSAP,
-    ordemSAP1: ordemSAPInput1.value.trim(),
-    data: dataFormatada
-  };
+const novoRegistro = {
+  status: status,
+  observacoes: observacoes,
+  ordemSAP: ordemSAP,
+  ordemSAP1: ordemSAPInput1.value.trim(),
+  statusSAP: statusSAP, // NOVO
+  data: dataFormatada
+};
 
 
     if (indiceHistoricoEditando !== null) {
@@ -271,12 +274,16 @@ function mostrarPopupUltimosDados() {
 
       const status = item.status || 'desconhecido';
       const ultimo = Array.isArray(item.historico) ? item.historico.at(-1) : null;
+
       const obs = ultimo?.observacoes || '';
       const sap = ultimo?.ordemSAP || '';
       const sapTitulo = ultimo?.ordemSAP1 || '';
+      const sapStatus = ultimo?.statusSAP || '';
 
       let linha = `${status === 'Inoperante' ? '❌' : '✅'} ${id}`;
+
       if (sapTitulo || sap) linha += `\n- SAP: ${sapTitulo}${sap ? ` (Nº ${sap})` : ''}`;
+      if (sapStatus) linha += `\n- Status SAP: ${sapStatus}`;
       if (obs) linha += `\n- Obs: ${obs}`;
 
       grupos[armazem].push(linha);
