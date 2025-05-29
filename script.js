@@ -264,7 +264,6 @@ function mostrarPopupUltimosDados() {
     const grupos = {};
 
     Object.entries(dados).forEach(([id, item]) => {
-      // Protege contra erro de substring em IDs inválidos
       const partes = id.split('-');
       const armazem = partes.length >= 3 ? partes[2].substring(0, 4).toUpperCase() : 'OUTROS';
 
@@ -273,16 +272,20 @@ function mostrarPopupUltimosDados() {
       const status = item.status || 'desconhecido';
       const ultimo = Array.isArray(item.historico) ? item.historico.at(-1) : null;
       const obs = ultimo?.observacoes || '';
+      const sap = ultimo?.ordemSAP || '';
+      const sapTitulo = ultimo?.ordemSAP1 || '';
 
-      const linha = `${status === 'Inoperante' ? '❌' : '✅'} ${id}`;
-      grupos[armazem].push({ linha, obs });
+      let linha = `${status === 'Inoperante' ? '❌' : '✅'} ${id}`;
+      if (sapTitulo || sap) linha += `\n- SAP: ${sapTitulo}${sap ? ` (Nº ${sap})` : ''}`;
+      if (obs) linha += `\n- Obs: ${obs}`;
+
+      grupos[armazem].push(linha);
     });
 
-    Object.entries(grupos).forEach(([arma, arr]) => {
+    Object.entries(grupos).forEach(([arma, linhas]) => {
       texto += `\n${arma}\n\n`;
-      arr.forEach(({ linha, obs }) => {
-        texto += `${linha}\n`;
-        if (obs) texto += `- ${obs}\n`;
+      linhas.forEach(linha => {
+        texto += `${linha}\n\n`;
       });
     });
 
