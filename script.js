@@ -219,7 +219,7 @@ function atualizarVisualPortao(idPortao, status) {
   botoes.forEach(botao => {
     if (botao.dataset.id === idPortao) {
       botao.classList.remove('fechar', 'manutencao');
-      if (status === 'fechado') {
+      if (status === 'Inoperante') {
         botao.classList.add('fechar');
       } else if (status === 'manutencao') {
         botao.classList.add('manutencao');
@@ -268,7 +268,7 @@ function mostrarPopupUltimosDados() {
       const ultimo = Array.isArray(item.historico) ? item.historico.at(-1) : null;
       const obs = ultimo?.observacoes || '';
 
-      const linha = `${status === 'fechado' ? '❌' : '✅'} ${id}`;
+      const linha = `${status === 'Inoperante' ? '❌' : '✅'} ${id}`;
       grupos[armazem].push({ linha, obs });
     });
 
