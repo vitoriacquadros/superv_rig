@@ -1,3 +1,6 @@
+//@author: vitoria quadros 
+// @description: Script para gerenciar o status dos portões do Armazém Rig, com integração ao Firebase Realtime Database.
+// @version: 1.0
 // script.js
 const firebaseConfig = {
   apiKey: "AIzaSyBNLGsUrMFLSA9NmqkKPlouWeO7ttvM6Fc",

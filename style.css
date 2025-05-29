@@ -149,3 +149,5 @@ header h1 {
   padding: 5px;
   border-bottom: 1px solid #eee;
 }
+
+body { display: none; }
