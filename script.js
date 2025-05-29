@@ -56,10 +56,9 @@ const formulario = document.getElementById('formulario');
 const tituloPortao = document.getElementById('tituloPortao');
 const idPortaoInput = document.getElementById('idPortao');
 const statusSelect = document.getElementById('status');
-const statusSelect = document.getElementById('status SAP');
-const ordemSAPInput = document.getElementById('ordemSAP1');
-const observacoesInput = document.getElementById('observacoes');
+const ordemSAPInput1 = document.getElementById('ordemSAP1');
 const ordemSAPInput = document.getElementById('ordemSAP');
+const observacoesInput = document.getElementById('observacoes');
 let indiceHistoricoEditando = null;
 const historicoLista = document.getElementById('historicoLista');
 const container = document.querySelector('.planta-container');
@@ -104,21 +103,18 @@ function abrirFormulario(idPortao) {
   overlay.style.display = 'block';
   formulario.style.display = 'block';
 
+  // Limpa os campos sempre que abrir
+  statusSelect.value = '';
+  observacoesInput.value = '';
+  ordemSAPInput.value = '';
+  indiceHistoricoEditando = null;
+
+  // Busca dados atuais e mostra o histórico
   db.ref('portoes/' + idPortao).get().then(snapshot => {
     if (snapshot.exists()) {
       const dados = snapshot.val();
-      statusSelect.value = dados.status || '';
-
-      // Preenche a última observação e ordem SAP do histórico
-      const ultimo = dados.historico?.at(-1);
-      observacoesInput.value = ultimo?.observacoes || '';
-      ordemSAPInput.value = ultimo?.ordemSAP || '';
-
       montarHistorico(dados.historico || []);
     } else {
-      statusSelect.value = '';
-      observacoesInput.value = '';
-      ordemSAPInput.value = '';
       montarHistorico([]);
     }
   });
@@ -147,7 +143,9 @@ function montarHistorico(lista) {
     const div = document.createElement('div');
     div.className = 'historico-item';
     div.textContent = `${item.data} - ${item.status} - ${item.observacoes || ''}` + 
-                      (item.ordemSAP ? ` (SAP: ${item.ordemSAP})` : '');
+    (item.ordemSAP1 ? ` (${item.ordemSAP1})` : '') + 
+    (item.ordemSAP ? ` (SAP: ${item.ordemSAP})` : '');
+
 
     div.addEventListener('click', () => {
       statusSelect.value = item.status || '';
@@ -191,11 +189,13 @@ function salvarStatus(event) {
     const dataFormatada = dataAtual.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
 
     const novoRegistro = {
-      status: status,
-      observacoes: observacoes,
-      ordemSAP: ordemSAP,
-      data: dataFormatada
-    };
+    status: status,
+    observacoes: observacoes,
+    ordemSAP: ordemSAP,
+    ordemSAP1: ordemSAPInput1.value.trim(),
+    data: dataFormatada
+  };
+
 
     if (indiceHistoricoEditando !== null) {
       historico[indiceHistoricoEditando] = novoRegistro;
