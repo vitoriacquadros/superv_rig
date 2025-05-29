@@ -29,18 +29,24 @@ firebase.auth().onAuthStateChanged(user => {
     document.body.classList.remove("auth-logged-in");
     document.body.classList.add("auth-loading");
 
-ui.start("#firebaseui-auth-container", {
-  signInOptions: [
-    {
-      provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-      disableSignUp: {
-        status: true
-      }
-    }
-  ],
-  signInSuccessUrl: window.location.href
-});
-  }
+const loginForm = document.getElementById('login-form');
+const loginError = document.getElementById('login-error');
+
+loginForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+
+  firebase.auth().signInWithEmailAndPassword(email, password)
+    .then(() => {
+      loginError.textContent = '';
+      document.body.classList.remove("auth-loading");
+      document.body.classList.add("auth-logged-in");
+    })
+    .catch((error) => {
+      loginError.textContent = "Email ou senha inválidos.";
+      console.error("Erro no login:", error);
+    });
 });
 
 
