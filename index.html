@@ -60,19 +60,23 @@
       <label for="observacoes">Observações:</label>
       <textarea id="observacoes" rows="3" placeholder="Equipe de execução, título da ordem SAP"></textarea>
 
-      <label for="ordemSAP">Título ordem SAP:</label>
+      <!-- Mude o id da descrição -->
+      <label for="ordemSAP1">Título ordem SAP:</label>
       <input type="text" id="ordemSAP1" placeholder="descrição da ordem SAP" />
 
+      <!-- Deixe esse como 'ordemSAP' -->
       <label for="ordemSAP">Ordem SAP:</label>
       <input type="text" id="ordemSAP" placeholder="Número da ordem SAP" />
 
 
-      <label for="status SAP">Status:</label>
-      <select id="status SAP" required>
-        <option value="">Selecione</option>
-        <option value="Operacional">Atrasada</option>
-        <option value="Inoperante">Em execução</option>
+
+      <label for="statusSAP">Status da SAP:</label>
+      <select id="statusSAP" required>
+      <option value="">Selecione</option>
+      <option value="Atrasada">Atrasada</option>
+      <option value="Execução">Em execução</option>
       </select>
+
 
       <label for="dataHora">Data e Hora:</label>
       <input type="datetime-local" id="dataHora" required />

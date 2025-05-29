@@ -43,12 +43,16 @@ loginForm.addEventListener('submit', (e) => {
 // Mantém usuário logado ao recarregar
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
+    console.log("Usuário autenticado:", user.email);
     document.getElementById("user-name").textContent = user.displayName || "Usuário";
     document.getElementById("user-email").textContent = user.email;
     document.getElementById('firebase-auth-container').style.display = 'none';
     document.getElementById('conteudo').style.display = 'block';
+  } else {
+    console.log("Nenhum usuário logado.");
   }
 });
+
 
 
 const overlay = document.getElementById('overlay');
@@ -57,7 +61,7 @@ const tituloPortao = document.getElementById('tituloPortao');
 const idPortaoInput = document.getElementById('idPortao');
 const statusSelect = document.getElementById('status');
 const ordemSAPInput1 = document.getElementById('ordemSAP1');
-const ordemSAPInput = document.getElementById('ordemSAP');
+const statusSAPSelect = document.getElementById('statusSAP');
 const observacoesInput = document.getElementById('observacoes');
 let indiceHistoricoEditando = null;
 const historicoLista = document.getElementById('historicoLista');
