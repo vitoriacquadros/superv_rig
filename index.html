@@ -10,9 +10,6 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-
-  <!-- SheetJS para XLSX -->
-  <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/xlsx.mini.min.js"></script>
 </head>
 <body class="auth-loading">
 
@@ -29,18 +26,14 @@
 
 <!-- Sistema Principal -->
 <div id="conteudo" style="display:none;">
-  <header style="display:flex; align-items:center; justify-content:space-between;">
-    <div>
-      <img src="https://i.imgur.com/PazFZ1y.png" alt="Logo da Empresa" />
-      <h1>Supervisório - Portões de Armazéns Yara</h1>
-    </div>
-    <div id="user-info" style="text-align:right;">
+  <header>
+    <img src="https://i.imgur.com/PazFZ1y.png" alt="Logo da Empresa" />
+    <h1>Supervisório - Portões de Armazéns Yara</h1>
+    <div id="user-info" style="margin-left:auto; text-align:right;">
       <span id="user-name"></span><br />
-      <span id="user-email" style="font-size: 12px;"></span><br />
-      <button onclick="firebase.auth().signOut()" style="margin-top:4px;">🚪 Sair</button>
+      <span id="user-email" style="font-size: 12px;"></span>
     </div>
   </header>
-
   <div class="planta-container">
     <img src="https://i.imgur.com/MpjnPTw.png" alt="Planta da Fábrica" />
   </div>
@@ -83,7 +76,6 @@
     <div style="text-align:right; margin-top:12px;">
       <button class="botao-acao" onclick="fecharPopupDados()">Fechar</button>
       <button class="botao-acao" onclick="copiarPopupDados()">Copiar Texto</button>
-      <button class="botao-acao" onclick="downloadXLSX()">⬇ Exportar XLSX</button>
     </div>
   </div>
 </div>
