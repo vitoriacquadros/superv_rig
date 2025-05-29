@@ -310,5 +310,4 @@ function baixarComoTxt() {
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
+  URL.revokeObjectURL(url);}
