@@ -36,7 +36,9 @@ loginForm.addEventListener('submit', (e) => {
       console.error("Erro ao fazer login:", error);
       loginError.textContent = "Email ou senha inválidos.";
     });
-});
+}
+);
+
 
 // Mantém usuário logado ao recarregar
 firebase.auth().onAuthStateChanged((user) => {
@@ -286,7 +288,6 @@ function mostrarPopupUltimosDados() {
     alert('Erro ao carregar dados. Tente novamente mais tarde.');
   });
 }
-
 
 
 function copiarPopupDados() {
