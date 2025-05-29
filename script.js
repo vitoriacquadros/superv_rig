@@ -1,3 +1,4 @@
+// firebaseConfig.js ou no início do seu script.js
 const firebaseConfig = {
   apiKey: "AIzaSyBNLGsUrMFLSA9NmqkKPlouWeO7ttvM6Fc",
   authDomain: "armazensrig.firebaseapp.com",
@@ -199,7 +200,7 @@ function salvarStatus(event) {
 
     const dataAtual = new Date();
     const dataFormatada = dataAtual.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-    
+
 const novoRegistro = {
   status: status,
   observacoes: observacoes,
@@ -334,3 +335,44 @@ function baixarComoTxt() {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);}
+
+  function baixarComoPlanilha() {
+  db.ref('portoes').get().then(snapshot => {
+    if (!snapshot.exists()) {
+      alert('Nenhum dado encontrado.');
+      return;
+    }
+
+    const dados = snapshot.val();
+    const registros = [];
+
+    Object.entries(dados).forEach(([id, item]) => {
+      const historico = Array.isArray(item.historico) ? item.historico : [];
+
+      historico.forEach(registro => {
+        registros.push({
+          Portão: id,
+          Status: registro.status || '',
+          'Título SAP': registro.ordemSAP1 || '',
+          'Número SAP': registro.ordemSAP || '',
+          'Status SAP': registro.statusSAP || '',
+          Observações: registro.observacoes || '',
+          'Data/Hora': registro.data || ''
+        });
+      });
+    });
+
+    if (registros.length === 0) {
+      alert('Não há registros para exportar.');
+      return;
+    }
+
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(registros);
+    XLSX.utils.book_append_sheet(wb, ws, 'Portões');
+    XLSX.writeFile(wb, 'portoes_status.xlsx');
+  }).catch(error => {
+    console.error('Erro ao gerar planilha:', error);
+    alert('Erro ao gerar planilha. Tente novamente.');
+  });
+}
