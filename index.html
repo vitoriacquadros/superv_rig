@@ -10,9 +10,6 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-
-  <!-- SheetJS para exportação em Excel -->
-  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 </head>
 <body class="auth-loading">
 
@@ -42,24 +39,66 @@
     <img src="https://i.imgur.com/MpjnPTw.png" alt="Planta da Fábrica" />
   </div>
 
-  <div style="text-align:center; margin:24px 0;">
+  <div style="text-align:center; margin-bottom:24px">
     <button class="botao-acao" onclick="mostrarPopupUltimosDados()">📋 Ver Dados Texto</button>
-    <button class="botao-acao" onclick="baixarComoPlanilha()">⬇ Baixar Planilha Excel</button>
   </div>
 
-  <!-- Popup de dados com textarea -->
+  <div class="overlay" id="overlay" onclick="fecharFormulario()"></div>
+
+  <div class="formulario" id="formulario">
+    <h3 id="tituloPortao">Portão</h3>
+    <form id="formPortao" onsubmit="salvarStatus(event)">
+      <input type="hidden" id="idPortao" />
+      <label for="status">Status:</label>
+      <select id="status" required>
+        <option value="">Selecione</option>
+        <option value="Operacional">Operacional</option>
+        <option value="Inoperante">Inoperante</option>
+        <option value="manutencao">Em manutenção</option>
+      </select>
+
+      <label for="observacoes">Observações:</label>
+      <textarea id="observacoes" rows="3" placeholder="Equipe de execução, título da ordem SAP"></textarea>
+
+      <!-- Mude o id da descrição -->
+      <label for="ordemSAP1">Título ordem SAP:</label>
+      <input type="text" id="ordemSAP1" placeholder="descrição da ordem SAP" />
+
+      <!-- Deixe esse como 'ordemSAP' -->
+      <label for="ordemSAP">Ordem SAP:</label>
+      <input type="text" id="ordemSAP" placeholder="Número da ordem SAP" />
+
+
+
+      <label for="statusSAP">Status da SAP:</label>
+      <select id="statusSAP" required>
+      <option value="">Selecione</option>
+      <option value="Atrasada">Atrasada</option>
+      <option value="Execução">Em execução</option>
+      <option value="Concluída">Concluída</option>
+      <option value="Cancelada">Cancelada</option>
+      <option value ="Aguardando">Aguardando</option>
+      </select>
+
+
+      <label for="dataHora">Data e Hora:</label>
+      <input type="datetime-local" id="dataHora" required />
+
+      <button type="submit">Salvar</button>
+    </form>
+    <div class="historico-lista" id="historicoLista"></div>
+  </div>
+
   <div id="popup-dados" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; border-radius:8px; max-width:600px; padding:20px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:9999;">
     <h3>📋 Últimos Dados de Portões</h3>
     <textarea id="popup-conteudo" style="width:100%; height:400px; font-family:monospace; font-size:13px; padding:8px; box-sizing:border-box;">Carregando...</textarea>
     <div style="text-align:right; margin-top:12px;">
       <button class="botao-acao" onclick="fecharPopupDados()">Fechar</button>
       <button class="botao-acao" onclick="copiarPopupDados()">Copiar Texto</button>
-      <button class="botao-acao" onclick="baixarComoTxt()">Baixar .txt</button>
     </div>
   </div>
 </div>
 
-<!-- Seu script.js deve ser importado corretamente -->
 <script src="script.js"></script>
 </body>
-</html>  
+</html>
