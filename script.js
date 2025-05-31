@@ -60,7 +60,6 @@ const formulario = document.getElementById('formulario');
 const tituloPortao = document.getElementById('tituloPortao');
 const idPortaoInput = document.getElementById('idPortao');
 const statusSelect = document.getElementById('status');
-const ordemSAPInput = document.getElementById('ordemSAP');
 const ordemSAPInput1 = document.getElementById('ordemSAP1');
 const statusSAPSelect = document.getElementById('statusSAP');
 const observacoesInput = document.getElementById('observacoes');
@@ -108,15 +107,13 @@ function abrirFormulario(idPortao) {
   overlay.style.display = 'block';
   formulario.style.display = 'block';
 
-  // Limpa todos os campos ao abrir
+  // Limpa os campos sempre que abrir
   statusSelect.value = '';
   observacoesInput.value = '';
   ordemSAPInput.value = '';
-  ordemSAPInput1.value = '';
-  statusSAPSelect.value = '';
   indiceHistoricoEditando = null;
 
-  // Busca dados do Firebase
+  // Busca dados atuais e mostra o histórico
   db.ref('portoes/' + idPortao).get().then(snapshot => {
     if (snapshot.exists()) {
       const dados = snapshot.val();
@@ -126,7 +123,6 @@ function abrirFormulario(idPortao) {
     }
   });
 }
-
 
 function fecharFormulario() {
   overlay.style.display = 'none';
@@ -156,14 +152,11 @@ function montarHistorico(lista) {
 
 
     div.addEventListener('click', () => {
-    statusSelect.value = item.status || '';
-    observacoesInput.value = item.observacoes || '';
-    ordemSAPInput.value = item.ordemSAP || '';
-    ordemSAPInput1.value = item.ordemSAP1 || '';
-    statusSAPSelect.value = item.statusSAP || '';
-    indiceHistoricoEditando = indexOriginal;
-});
-
+      statusSelect.value = item.status || '';
+      observacoesInput.value = item.observacoes || '';
+      ordemSAPInput.value = item.ordemSAP || '';
+      indiceHistoricoEditando = indexOriginal; // Guardar índice para editar depois
+    });
 
     historicoLista.appendChild(div);
   });
@@ -200,16 +193,15 @@ function salvarStatus(event) {
 
     const dataAtual = new Date();
     const dataFormatada = dataAtual.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-    
+
 const novoRegistro = {
   status: status,
   observacoes: observacoes,
   ordemSAP: ordemSAP,
   ordemSAP1: ordemSAPInput1.value.trim(),
-  statusSAP: statusSAP,
-  data: dataAtual.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
+  statusSAP: statusSAP, // NOVO
+  data: dataFormatada
 };
-
 
 
     if (indiceHistoricoEditando !== null) {
