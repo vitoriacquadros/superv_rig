@@ -158,3 +158,42 @@ body.auth-logged-in #firebase-auth-container {
 body.auth-logged-in #conteudo {
   display: block;
 }
+
+.planta-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 100%;
+}
+
+.botoes-centrais {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 10px 16px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.botao-acao {
+  padding: 8px 16px;
+  background-color: #0069d9;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.botao-acao:hover {
+  background-color: #004a9f;
+}
