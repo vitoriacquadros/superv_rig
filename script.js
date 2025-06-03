@@ -335,3 +335,44 @@ function baixarComoTxt() {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);}
+
+function baixarComoExcel() {
+  db.ref('portoes').get().then(snapshot => {
+    if (!snapshot.exists()) {
+      alert('Nenhum dado encontrado.');
+      return;
+    }
+
+    const dados = snapshot.val();
+    const linhas = [];
+
+    Object.entries(dados).forEach(([idPortao, dadosPortao]) => {
+      const historico = dadosPortao.historico || [];
+
+      historico.forEach(registro => {
+        linhas.push({
+          'Portão': idPortao,
+          'Status': registro.status || '',
+          'Observações': registro.observacoes || '',
+          'Título SAP': registro.ordemSAP1 || '',
+          'Ordem SAP': registro.ordemSAP || '',
+          'Status SAP': registro.statusSAP || '',
+          'Data': registro.data || ''
+        });
+      });
+    });
+
+    if (linhas.length === 0) {
+      alert('Nenhum histórico encontrado.');
+      return;
+    }
+
+    const ws = XLSX.utils.json_to_sheet(linhas);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'HistoricoPortoes');
+    XLSX.writeFile(wb, 'historico_portoes.xlsx');
+  }).catch(error => {
+    console.error('Erro ao gerar XLSX:', error);
+    alert('Erro ao gerar Excel. Tente novamente.');
+  });
+}

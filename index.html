@@ -10,6 +10,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body class="auth-loading">
 
@@ -39,9 +40,11 @@
     <img src="https://i.imgur.com/MpjnPTw.png" alt="Planta da Fábrica" />
   </div>
 
-  <div style="text-align:center; margin-bottom:24px">
-    <button class="botao-acao" onclick="mostrarPopupUltimosDados()">📋 Ver Dados Texto</button>
-  </div>
+ <div style="text-align:center; margin-bottom:24px">
+  <button class="botao-acao" onclick="mostrarPopupUltimosDados()">📋 Ver Dados Texto</button>
+  <button class="botao-acao" onclick="baixarComoExcel()">📥 Exportar XLSX</button>
+ </div>
+
 
   <div class="overlay" id="overlay" onclick="fecharFormulario()"></div>
 
