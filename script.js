@@ -364,3 +364,19 @@ window.baixarComoExcel = function () {
     alert('Erro ao gerar Excel. Tente novamente.');
   });
 }
+
+window.fazerLogout = function () {
+  const confirmar = confirm("Deseja realmente sair da sua conta?");
+  if (!confirmar) return;
+
+  firebase.auth().signOut().then(() => {
+    document.getElementById('conteudo').style.display = 'none';
+    document.getElementById('firebase-auth-container').style.display = 'block';
+    document.getElementById('user-name').textContent = '';
+    document.getElementById('user-email').textContent = '';
+    alert("Logout realizado com sucesso.");
+  }).catch((error) => {
+    console.error('Erro ao fazer logout:', error);
+    alert('Erro ao sair. Tente novamente.');
+  });
+};
