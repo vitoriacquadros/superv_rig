@@ -36,22 +36,71 @@
     </div>
   </header>
 
-  <!-- Planta e botões centralizados -->
-<div class="planta-container">
-  <div class="botoes-centrais">
-    <button class="botao-acao" onclick="mostrarPopupUltimosDados()" title="Ver Dados em Texto">📋 Ver Texto</button>
-    <button class="botao-acao" onclick="baixarComoExcel()" title="Exportar para Excel">📥 XLSX</button>
-    <button class="botao-acao" onclick="fazerLogout()" title="Sair do sistema">🔓 Logout</button>
+  <div class="planta-container">
+    <img src="https://i.imgur.com/MpjnPTw.png" alt="Planta da Fábrica" />
   </div>
 
-  <img class="planta-imagem" src="https://i.imgur.com/MpjnPTw.png" alt="Planta da Fábrica" />
+  <div style="text-align:center; margin-bottom:24px">
+    <button class="botao-acao" onclick="mostrarPopupUltimosDados()" title="Report para Whatsapp">
+    📋 Report para Whatsapp
+    </button>
+
+   <button class="botao-acao" onclick="baixarComoExcel()" title="Exportar dados em Excel">
+    📥 Baixar como planilha
+   </button>
+
+    <button class="botao-acao" onclick="fazerLogout()" title="Sair do sistema">
+    🔓 Logout
+    </button>
 </div>
+
+
+
 
   <div class="overlay" id="overlay" onclick="fecharFormulario()"></div>
 
   <div class="formulario" id="formulario">
-    <!-- (continua igual como já estava) -->
-    <!-- ... -->
+    <h3 id="tituloPortao">Portão</h3>
+    <form id="formPortao" onsubmit="salvarStatus(event)">
+      <input type="hidden" id="idPortao" />
+      <label for="status">Status:</label>
+      <select id="status" required>
+        <option value="">Selecione</option>
+        <option value="Operacional">Operacional</option>
+        <option value="Inoperante">Inoperante</option>
+        <option value="manutencao">Em manutenção</option>
+      </select>
+
+      <label for="observacoes">Observações:</label>
+      <textarea id="observacoes" rows="3" placeholder="Equipe de execução, título da ordem SAP"></textarea>
+
+
+      <label for="ordemSAP1">Título ordem SAP:</label>
+      <input type="text" id="ordemSAP1" placeholder="descrição da ordem SAP" />
+
+      
+      <label for="ordemSAP">Ordem SAP:</label>
+      <input type="text" id="ordemSAP" placeholder="Número da ordem SAP" />
+
+
+
+      <label for="statusSAP">Status da SAP:</label>
+      <select id="statusSAP" required>
+      <option value="">Selecione</option>
+      <option value="Atrasada">Atrasada</option>
+      <option value="Execução">Em execução</option>
+      <option value="Concluída">Concluída</option>
+      <option value="Cancelada">Cancelada</option>
+      <option value ="Aguardando">Aguardando</option>
+      </select>
+
+
+      <label for="dataHora">Data e Hora:</label>
+      <input type="datetime-local" id="dataHora" required />
+
+      <button type="submit">Salvar</button>
+    </form>
+    <div class="historico-lista" id="historicoLista"></div>
   </div>
 
   <div id="popup-dados" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; border-radius:8px; max-width:600px; padding:20px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:9999;">
