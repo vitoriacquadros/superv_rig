@@ -60,6 +60,7 @@ const formulario = document.getElementById('formulario');
 const tituloPortao = document.getElementById('tituloPortao');
 const idPortaoInput = document.getElementById('idPortao');
 const statusSelect = document.getElementById('status');
+const ordemSAPInput = document.getElementById('ordemSAP');
 const ordemSAPInput1 = document.getElementById('ordemSAP1');
 const statusSAPSelect = document.getElementById('statusSAP');
 const observacoesInput = document.getElementById('observacoes');
@@ -107,13 +108,15 @@ function abrirFormulario(idPortao) {
   overlay.style.display = 'block';
   formulario.style.display = 'block';
 
-  // Limpa os campos sempre que abrir
+  // Limpa todos os campos ao abrir
   statusSelect.value = '';
   observacoesInput.value = '';
   ordemSAPInput.value = '';
+  ordemSAPInput1.value = '';
+  statusSAPSelect.value = '';
   indiceHistoricoEditando = null;
 
-  // Busca dados atuais e mostra o histórico
+  // Busca dados do Firebase
   db.ref('portoes/' + idPortao).get().then(snapshot => {
     if (snapshot.exists()) {
       const dados = snapshot.val();
@@ -123,6 +126,7 @@ function abrirFormulario(idPortao) {
     }
   });
 }
+
 
 function fecharFormulario() {
   overlay.style.display = 'none';
@@ -152,11 +156,14 @@ function montarHistorico(lista) {
 
 
     div.addEventListener('click', () => {
-      statusSelect.value = item.status || '';
-      observacoesInput.value = item.observacoes || '';
-      ordemSAPInput.value = item.ordemSAP || '';
-      indiceHistoricoEditando = indexOriginal; // Guardar índice para editar depois
-    });
+    statusSelect.value = item.status || '';
+    observacoesInput.value = item.observacoes || '';
+    ordemSAPInput.value = item.ordemSAP || '';
+    ordemSAPInput1.value = item.ordemSAP1 || '';
+    statusSAPSelect.value = item.statusSAP || '';
+    indiceHistoricoEditando = indexOriginal;
+});
+
 
     historicoLista.appendChild(div);
   });
@@ -199,9 +206,10 @@ const novoRegistro = {
   observacoes: observacoes,
   ordemSAP: ordemSAP,
   ordemSAP1: ordemSAPInput1.value.trim(),
-  statusSAP: statusSAP, // NOVO
-  data: dataFormatada
+  statusSAP: statusSAP,
+  data: dataAtual.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
 };
+
 
 
     if (indiceHistoricoEditando !== null) {
@@ -327,3 +335,44 @@ function baixarComoTxt() {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);}
+
+  function baixarComoPlanilha() {
+  db.ref('portoes').get().then(snapshot => {
+    if (!snapshot.exists()) {
+      alert('Nenhum dado encontrado.');
+      return;
+    }
+
+    const dados = snapshot.val();
+    const registros = [];
+
+    Object.entries(dados).forEach(([id, item]) => {
+      const historico = Array.isArray(item.historico) ? item.historico : [];
+
+      historico.forEach(registro => {
+        registros.push({
+          Portão: id,
+          Status: registro.status || '',
+          'Título SAP': registro.ordemSAP1 || '',
+          'Número SAP': registro.ordemSAP || '',
+          'Status SAP': registro.statusSAP || '',
+          Observações: registro.observacoes || '',
+          'Data/Hora': registro.data || ''
+        });
+      });
+    });
+
+    if (registros.length === 0) {
+      alert('Não há registros para exportar.');
+      return;
+    }
+
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(registros);
+    XLSX.utils.book_append_sheet(wb, ws, 'Portões');
+    XLSX.writeFile(wb, 'portoes_status.xlsx');
+  }).catch(error => {
+    console.error('Erro ao gerar planilha:', error);
+    alert('Erro ao gerar planilha. Tente novamente.');
+  });
+}
